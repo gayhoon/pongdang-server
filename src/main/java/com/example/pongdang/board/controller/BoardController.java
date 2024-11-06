@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/boards") // 기본 경로 설정
+@RequestMapping("/api/v1/boards") // 기본 경로 설정
 public class BoardController {
 
     private final BoardService boardService;
