@@ -20,6 +20,10 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// modelmapper: 객체간 변수 복사 기능을 제공함
+	implementation 'org.modelmapper:modelmapper:3.1.1'
+	// validation: 클라이언트에서 서버로 파라미터 전달 시 유효성 검사
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
