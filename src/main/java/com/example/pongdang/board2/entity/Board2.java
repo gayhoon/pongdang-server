@@ -1,4 +1,4 @@
-package com.example.pongdang.board.entity;
+package com.example.pongdang.board2.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Board {
+public class Board2 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +21,4 @@ public class Board {
     private String title;
 
     private String content;
-
 }
