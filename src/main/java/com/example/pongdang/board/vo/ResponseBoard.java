@@ -11,6 +11,8 @@ import lombok.*;
 @Builder
 public class ResponseBoard {
 
+    private Long id;
+
     private String title;
 
     private String content;
