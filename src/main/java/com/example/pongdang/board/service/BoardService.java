@@ -17,7 +17,30 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    // 게시글 저장
+    /**
+     * 게시글 전체 목록을 조회한다.
+     * @return 게시글 목록
+     */
+    public List<Board> getAllBoards() {
+        return boardRepository.findAll();
+    }
+
+    /**
+     * 게시글 상세정보를 조회한다.
+     * @param id 게시글 PK
+     * @return 게시글 상세정보
+     */
+    public Board getBoardById(Long id) {
+        Optional<Board> opBoard = boardRepository.findById(id);
+
+        return opBoard.orElse(Board.builder().build());
+    }
+
+    /**
+     * 게시글을 저장한다.
+     * @param boardDto 저장할 게시글 정보
+     * @return responseBoard 게시글 제목 및 내용
+     */
     public Board saveBoard(BoardDto boardDto) {
 
         Board saveBoard;
@@ -44,8 +67,16 @@ public class BoardService {
         return saveBoard;
     }
 
-    // 모든 게시글 조회
-    public List<Board> getAllBoards() {
-        return boardRepository.findAll();
+    /**
+     * 게시글을 삭제한다.
+     * @param id 게시글 PK
+     */
+    public void deleteBoard(Long id) {
+
+        Optional<Board> opBoard = boardRepository.findById(id);
+        Board board = opBoard.orElseThrow();
+
+        boardRepository.delete(board);
     }
+
 }

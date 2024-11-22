@@ -1,8 +1,7 @@
 package com.example.pongdang.board.dto;
 
-// 이 애노테이션을 클래스 위에 붙이면 해당 클래스가 JPA 엔티티임을 나타냅니다.
-
 import com.example.pongdang.board.entity.Board;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -14,8 +13,10 @@ public class BoardDto {
 
     private Long id;
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String content;
 
     public Board toEntity() {
