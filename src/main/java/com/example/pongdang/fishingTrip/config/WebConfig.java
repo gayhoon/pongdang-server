@@ -1,4 +1,4 @@
-package com.example.pongdang.board.config;
+package com.example.pongdang.fishingTrip.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
