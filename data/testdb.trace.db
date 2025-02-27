@@ -1,0 +1,116 @@
+2025-02-13 10:27:56.043314+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Cannot parse "DATE" constant "24.01.02"; SQL statement:
+INSERT INTO "PUBLIC"."FISHING_TRIP_ENTITY_COPY_3_0"("ID", "CATE", "DATE", "FISH", "NICKNAME", "REPLY", "THUMB", "TITLE", "VIEW") OVERRIDING SYSTEM VALUE SELECT "ID", "CATE", "DATE", "FISH", "NICKNAME", "REPLY", "THUMB", "TITLE", "VIEW" FROM "PUBLIC"."FISHING_TRIP_ENTITY" [22007-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:518)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.value.ValueDate.parse(ValueDate.java:53)
+	at org.h2.value.Value.convertToDate(Value.java:1875)
+	at org.h2.value.Value.convertTo(Value.java:1168)
+	at org.h2.value.Value.convertForAssignTo(Value.java:1113)
+	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:369)
+	at org.h2.table.Table.convertInsertRow(Table.java:936)
+	at org.h2.command.dml.Insert.addRow(Insert.java:229)
+	at org.h2.command.dml.Insert.insertRows(Insert.java:203)
+	at org.h2.command.dml.Insert.update(Insert.java:135)
+	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:256)
+	at org.h2.command.ddl.AlterTableAlterColumn.execute(AlterTableAlterColumn.java:649)
+	at org.h2.command.ddl.AlterTableAlterColumn.cloneTableStructure(AlterTableAlterColumn.java:561)
+	at org.h2.command.ddl.AlterTableAlterColumn.copyData(AlterTableAlterColumn.java:343)
+	at org.h2.command.ddl.AlterTableAlterColumn.update(AlterTableAlterColumn.java:229)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:256)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:583)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:523)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:341)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:240)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:119)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:322)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1853)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1802)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:954)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:625)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.example.pongdang.PongdangApplication.main(PongdangApplication.java:10)
+Caused by: java.lang.NumberFormatException: For input string: "24.0"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
+	at java.base/java.lang.Integer.parseInt(Integer.java:668)
+	at java.base/java.lang.Integer.parseInt(Integer.java:786)
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:190)
+	at org.h2.value.ValueDate.parse(ValueDate.java:51)
+	... 59 more
+2025-02-26 12:24:15.766085+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]DELETEE FROM FISHING_TRIP_ENTITY"; expected "DELETE, DROP"; SQL statement:
+DELETEE FROM FISHING_TRIP_ENTITY [42001-224]
+2025-02-26 12:28:57.890282+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE FROM [*]FROM FISHING_TRIP_ENTITY"; expected "identifier"; SQL statement:
+DELETE FROM FROM FISHING_TRIP_ENTITY [42001-224]
+2025-02-27 09:32:17.179026+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM FISHING_TRIP_ENTITY \000d\000aALTER [*]TABLE fishing_trip ADD COLUMN view_count INT DEFAULT 0"; SQL statement:
+SELECT * FROM FISHING_TRIP_ENTITY 
+ALTER TABLE fishing_trip ADD COLUMN view_count INT DEFAULT 0 [42000-224]
+2025-02-27 09:32:26.397632+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP" not found; SQL statement:
+ALTER TABLE fishing_trip ADD COLUMN view_count INT DEFAULT 0 [42102-224]
+2025-02-27 09:32:43.435868+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM FISHING_TRIP_ENTITY ALTER [*]TABLE fishing_trip ADD COLUMN view_count INT DEFAULT 0"; SQL statement:
+SELECT * FROM FISHING_TRIP_ENTITY ALTER TABLE fishing_trip ADD COLUMN view_count INT DEFAULT 0 [42000-224]
+2025-02-27 09:37:12.875299+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * [*]FISHING_TRIP_ENTITY"; SQL statement:
+select * FISHING_TRIP_ENTITY [42000-224]
+2025-02-27 09:40:56.009140+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]drom table FISHING_TRIP_IMAGES"; expected "DELETE, DROP"; SQL statement:
+drom table FISHING_TRIP_IMAGES [42001-224]
+2025-02-27 09:41:23.551976+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* <criteria> */ select fte1_0.id,fte1_0.cate,fte1_0.date,fte1_0.detail,fte1_0.location,fte1_0.title,fte1_0.view_count from fishing_trip_entity fte1_0 [42102-224]
+2025-02-27 09:41:26.489444+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* <criteria> */ select fte1_0.id,fte1_0.cate,fte1_0.date,fte1_0.detail,fte1_0.location,fte1_0.title,fte1_0.view_count from fishing_trip_entity fte1_0 [42102-224]
+2025-02-27 18:33:46.445675+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop [*]FISHING_TRIP_IMAGES"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop FISHING_TRIP_IMAGES [42001-224]
+2025-02-27 20:55:53.997394+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP TABLE [*]FROM FISHING_TRIP_FISH"; expected "identifier"; SQL statement:
+DROP TABLE FROM FISHING_TRIP_FISH [42001-224]
+2025-02-27 20:56:36.233557+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TABLEFISHING_TRIP_ENTITY" not found; SQL statement:
+DELETE FROM TABLEFISHING_TRIP_ENTITY [42102-224]
+2025-02-27 20:56:45.251578+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TABLEFISHING_TRIP_ENTITY" not found; SQL statement:
+DROP TABLE TABLEFISHING_TRIP_ENTITY [42102-224]
+2025-02-27 20:56:52.315207+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TABLEFISHING_TRIP_ENTITY" not found; SQL statement:
+DELETE FROM TABLEFISHING_TRIP_ENTITY [42102-224]

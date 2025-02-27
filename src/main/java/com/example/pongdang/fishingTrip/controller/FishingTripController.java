@@ -23,7 +23,7 @@ public class FishingTripController {
     // ✅ 게시글 저장 (신규 등록 & 수정) - JSON 데이터 + 이미지 처리
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}) // ✅ multipart/form-data 요청 허용
     public ResponseEntity<ResponseFishingTrip> saveBoard(
-            @ModelAttribute FishingTripDto fishingTripDto, // ✅ JSON 데이터 받기 (@RequestPart 대신 사용 가능)
+            @RequestPart(value = "data") FishingTripDto fishingTripDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images // ✅ 이미지 파일 선택적
     ) {
         return ResponseEntity.ok(fishingTripService.saveBoard(fishingTripDto, images));
@@ -33,5 +33,12 @@ public class FishingTripController {
     @GetMapping
     public List<ResponseFishingTrip> getAllBoards() {
         return fishingTripService.getAllBoards();
+    }
+
+    // 특정 게시글 조회 API
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseFishingTrip> getFishingTripById(@PathVariable Long id) {
+        ResponseFishingTrip post = fishingTripService.getFishingTripById(id);
+        return ResponseEntity.ok(post);
     }
 }

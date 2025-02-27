@@ -33,6 +33,15 @@ public class FishingTripEntity {
     }
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Builder.Default // ✅ 기본 값 설정 (이전 경고 해결)
+    private List<FishingTripFishEntity> fishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FishingTripImageEntity> images = new ArrayList<>();
+
+    private int viewCount = 0; // 조회수 증가 (기본값 0)
+
+    //조회수 증가 메서드
+    public void increaseViewCount(){
+        this.viewCount += 1;
+    }
 }
