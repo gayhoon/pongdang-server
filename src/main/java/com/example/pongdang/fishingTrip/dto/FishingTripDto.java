@@ -20,6 +20,8 @@ public class FishingTripDto {
     private String detail;
     private List<String> images; // ✅ 여러 개의 이미지 URL 저장
     private List<FishingTripFishDto> fishes; // ✅ 여러 마리 물고기 정보 포함
+    private List<String> existingImages; // ✅ 유지할 기존 이미지 목록
+    private List<String> deletedImages;  // ✅ 삭제할 이미지 목록 추가
 
     public FishingTripEntity toEntity(){
         FishingTripEntity fishingTripEntity = FishingTripEntity.builder()

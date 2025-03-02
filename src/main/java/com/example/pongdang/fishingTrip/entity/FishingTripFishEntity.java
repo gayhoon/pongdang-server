@@ -24,6 +24,8 @@ public class FishingTripFishEntity {
 
     private String description; // 물고기 내용
 
+    private String imageUrl; // 물고기 사진 URL
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fishing_trip_id")
     private FishingTripEntity fishingTrip;

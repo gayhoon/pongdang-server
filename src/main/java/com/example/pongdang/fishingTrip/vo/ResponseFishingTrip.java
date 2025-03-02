@@ -27,5 +27,6 @@ public class ResponseFishingTrip {
         private double size;     // 크기 (cm)
         private String nickname; // 별명
         private String description; // 설명
+        private String imageUrl;
     }
 }

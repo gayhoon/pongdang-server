@@ -3,6 +3,7 @@ package com.example.pongdang.fishingTrip.dto;
 import com.example.pongdang.fishingTrip.entity.FishingTripEntity;
 import com.example.pongdang.fishingTrip.entity.FishingTripFishEntity;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class FishingTripFishDto {
     private double size;
     private String nickname;
     private String description;
+    private String imageUrl;
 
     public FishingTripFishEntity toEntity() {
         return FishingTripFishEntity.builder()
@@ -24,6 +26,7 @@ public class FishingTripFishDto {
                 .size(this.size)
                 .nickname(this.nickname)
                 .description(this.description)
+                .imageUrl(this.imageUrl)
                 .build();
     }
 }

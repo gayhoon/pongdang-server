@@ -2,12 +2,16 @@ package com.example.pongdang.fishingTrip.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileStorageService {
@@ -17,6 +21,7 @@ public class FileStorageService {
 
     private final String uploadDir = "uploads/"; // ✅ 업로드 디렉토리
 
+    @Transactional
     public String saveFile(MultipartFile file) {
         try {
             // ✅ uploads 폴더가 없으면 자동 생성
