@@ -52,6 +52,7 @@ public class FishingTripService {
                     .images(new ArrayList<>()) // ✅ 빈 리스트 추가 (null 방지)
                     .build();
             fishingTripRepository.save(post);
+            fishingTripRepository.flush(); // JPA가 즉시 INSERT 실행하여 ID가 생성되도록 강제(신규글 작성 시 client가 바로 생성된 게시글의 id를 받을 수 있도록)
         } else {
             post = fishingTripRepository.findById(fishingTripDto.getId())
                     .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -74,14 +75,16 @@ public class FishingTripService {
             fishingTripRepository.save(post);
         }
 
-        // ✅ 삭제할 이미지 처리 (프론트에서 삭제된 이미지 URL을 전송)
+        // ✅ 삭제할 이미지가 존재하면 DB에서 삭제
         if (fishingTripDto.getDeletedImages() != null && !fishingTripDto.getDeletedImages().isEmpty()) {
-            List<FishingTripImageEntity> imagesToDelete = fishingTripImageRepository.findByFishingTripId(post.getId())
-                    .stream()
-                    .filter(image -> fishingTripDto.getDeletedImages().contains(image.getImageUrl()))
-                    .collect(Collectors.toList());
+            System.out.println("🗑 삭제할 이미지 URL 목록: " + fishingTripDto.getDeletedImages());
 
-            fishingTripImageRepository.deleteAll(imagesToDelete);
+            // ✅ DB에서 이미지 URL이 `deletedImages` 목록에 포함된 것만 삭제
+            fishingTripImageRepository.deleteByFishingTripIdAndImageUrlIn(post.getId(), fishingTripDto.getDeletedImages());
+
+            // ✅ 삭제 후 남아있는 이미지 목록 확인 (디버깅용)
+            List<FishingTripImageEntity> remainingImages = fishingTripImageRepository.findByFishingTripId(post.getId());
+            System.out.println("✅ 삭제 후 남은 이미지 개수: " + remainingImages.size());
         }
 
         // ✅ 새로운 이미지 추가
@@ -135,6 +138,7 @@ public class FishingTripService {
 
 
         return ResponseFishingTrip.builder()
+                .id(post.getId())
                 .cate(post.getCate())
                 .title(post.getTitle())
                 .location(post.getLocation())
@@ -217,10 +221,22 @@ public class FishingTripService {
     }
 
     // 특정 게시글 삭제 기능
-    public void deleteFishingTrip(Long id){
-        if(!fishingTripFishRepository.existsById(id)){
-            throw new RuntimeException("삭제할 게시글이 존재하지 않습니다");
+    @Transactional
+    public void deleteFishingTrip(Long id) {
+        // ✅ 게시글 존재 여부 확인
+        if (!fishingTripRepository.existsById(id)) {
+            throw new RuntimeException("삭제할 게시글이 존재하지 않습니다.");
         }
+
+        // ✅ 연관된 이미지 데이터 삭제
+        fishingTripImageRepository.deleteByFishingTripId(id);
+
+        // ✅ 연관된 물고기 데이터 삭제
+        fishingTripFishRepository.deleteByFishingTripId(id);
+
+        // ✅ 게시글 삭제
         fishingTripRepository.deleteById(id);
+
+        System.out.println("✅ 게시글 삭제 완료: ID " + id);
     }
 }
