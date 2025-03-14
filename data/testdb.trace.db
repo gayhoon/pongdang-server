@@ -114,47 +114,24 @@ DROP TABLE TABLEFISHING_TRIP_ENTITY [42102-224]
 2025-02-27 20:56:52.315207+09:00 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TABLEFISHING_TRIP_ENTITY" not found; SQL statement:
 DELETE FROM TABLEFISHING_TRIP_ENTITY [42102-224]
-2025-03-02 15:01:54.499305+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop [*]FISHING_TRIP_IMAGES"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
-drop FISHING_TRIP_IMAGES [42001-224]
-2025-03-02 15:01:56.692682+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop [*]by FISHING_TRIP_IMAGES"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
-drop by FISHING_TRIP_IMAGES [42001-224]
-2025-03-02 15:01:59.439339+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]droped FISHING_TRIP_IMAGES"; expected "DELETE, DROP"; SQL statement:
-droped FISHING_TRIP_IMAGES [42001-224]
-2025-03-02 15:02:55.558391+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_FISH" not found; SQL statement:
-delete from FISHING_TRIP_FISH [42102-224]
-2025-03-02 15:03:08.599173+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "delete from [*]FROM FISHING_TRIP_ENTITY"; expected "identifier"; SQL statement:
-delete from FROM FISHING_TRIP_ENTITY [42001-224]
-2025-03-02 16:52:19.060333+09:00 jdbc[15]: null
-org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-224]
-	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.message.DbException.get(DbException.java:188)
-	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:218)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:135)
-	at org.h2.Driver.connect(Driver.java:59)
-	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:137)
-	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:360)
-	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:202)
-	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:461)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:724)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:703)
-	at java.base/java.util.concurrent.FutureTask.run$$$capture(FutureTask.java:264)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-224]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 17 more
-2025-03-02 18:18:51.134410+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]DESC BOARD"; expected "DELETE, DROP"; SQL statement:
-DESC BOARD [42001-224]
-2025-03-02 18:58:13.564667+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]FISHING_TRIP_FISH"; SQL statement:
-FISHING_TRIP_FISH [42000-224]
+2025-03-13 10:24:07.895464+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ID_TOKEN CHARACTER VARYING(255)": "'eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJ... (663)"; SQL statement:
+/* insert for com.example.pongdang.user.entity.UserEntity */insert  [22001-224]
+2025-03-13 10:24:49.349562+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ID_TOKEN CHARACTER VARYING(255)": "'eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJ... (663)"; SQL statement:
+/* insert for com.example.pongdang.user.entity.UserEntity */insert  [22001-224]
+2025-03-14 18:44:25.534343+09:00 jdbc[114]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* insert for com.example.pongdang.fishingTrip.entity.FishingTripEntity */insert into fishing_trip_entity (cate,date,detail,location,title,view_count,id) values (?,?,?,?,?,?,default) [42102-224]
+2025-03-14 18:44:38.728015+09:00 jdbc[114]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* <criteria> */ select fte1_0.id,fte1_0.cate,fte1_0.date,fte1_0.detail,fte1_0.location,fte1_0.title,fte1_0.view_count from fishing_trip_entity fte1_0 order by fte1_0.id desc [42102-224]
+2025-03-14 18:44:42.054717+09:00 jdbc[114]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* <criteria> */ select fte1_0.id,fte1_0.cate,fte1_0.date,fte1_0.detail,fte1_0.location,fte1_0.title,fte1_0.view_count from fishing_trip_entity fte1_0 order by fte1_0.id desc [42102-224]
+2025-03-14 18:44:47.332203+09:00 jdbc[114]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* <criteria> */ select fte1_0.id,fte1_0.cate,fte1_0.date,fte1_0.detail,fte1_0.location,fte1_0.title,fte1_0.view_count from fishing_trip_entity fte1_0 order by fte1_0.id desc [42102-224]
+2025-03-14 18:44:59.659704+09:00 jdbc[114]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FISHING_TRIP_ENTITY" not found; SQL statement:
+/* <criteria> */ select fte1_0.id,fte1_0.cate,fte1_0.date,fte1_0.detail,fte1_0.location,fte1_0.title,fte1_0.view_count from fishing_trip_entity fte1_0 order by fte1_0.id desc [42102-224]

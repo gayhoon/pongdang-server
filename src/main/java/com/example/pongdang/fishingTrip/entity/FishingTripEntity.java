@@ -1,5 +1,6 @@
 package com.example.pongdang.fishingTrip.entity;
 
+import com.example.pongdang.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,10 @@ public class FishingTripEntity {
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FishingTripImageEntity> images = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY) // 작성자(userEntity와 연결)
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
 
     private int viewCount = 0; // 조회수 증가 (기본값 0)
 

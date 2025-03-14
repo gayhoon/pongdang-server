@@ -8,8 +8,12 @@ import com.example.pongdang.fishingTrip.repository.FishingTripFishRepository;
 import com.example.pongdang.fishingTrip.repository.FishingTripRepository;
 import com.example.pongdang.fishingTrip.repository.FishingTripImageRepository;
 import com.example.pongdang.fishingTrip.vo.ResponseFishingTrip;
+import com.example.pongdang.user.entity.UserEntity;
+import com.example.pongdang.user.provider.JwtTokenProvider;
+import com.example.pongdang.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -25,20 +29,47 @@ public class FishingTripService {
     private final FishingTripImageRepository fishingTripImageRepository;
     private final FishingTripFishRepository fishingTripFishRepository;
     private final FileStorageService fileStorageService;
+    private final JwtTokenProvider jwtProvider; // JWT 검증을 위한 Provider 추가
+    private final UserRepository userRepository; // 사용자 정보 조회를 위한 Repository 추가
 
     public FishingTripService(FishingTripRepository fishingTripRepository,
                               FishingTripImageRepository fishingTripImageRepository,
                               FishingTripFishRepository fishingTripFishRepository,
-                              FileStorageService fileStorageService) {
+                              FileStorageService fileStorageService,
+                              JwtTokenProvider jwtProvider,
+                              UserRepository userRepository) { // UserRepository 추가
         this.fishingTripRepository = fishingTripRepository;
         this.fishingTripImageRepository = fishingTripImageRepository;
         this.fishingTripFishRepository = fishingTripFishRepository;
         this.fileStorageService = fileStorageService;
+        this.jwtProvider = jwtProvider;
+        this.userRepository = userRepository;
     }
 
     // ✅ 게시글 저장 (신규 & 수정)
     @Transactional
-    public ResponseFishingTrip saveBoard(FishingTripDto fishingTripDto, List<MultipartFile> images, Map<String, MultipartFile> fishImages) {
+    public ResponseFishingTrip saveBoard(FishingTripDto fishingTripDto,
+                                         List<MultipartFile> images,
+                                         Map<String, MultipartFile> fishImages,
+                                         @RequestHeader("Authorization") String authorizationHeader) {
+
+        System.out.println("🟢 받은 Authorization 헤더: " + authorizationHeader);
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("❌ Authorization 헤더가 올바르지 않습니다.");
+        }
+
+        String jwtToken = authorizationHeader.replace("Bearer ", "").trim(); // ✅ 중복 선언 제거 후 사용
+
+        System.out.println("🟢 추출된 JWT 토큰: '" + jwtToken + "'");
+
+        // JWT에서 사용자 이메일 추출
+        String email = jwtProvider.getEmailFromToken(jwtToken);
+        System.out.println("🟢 JWT에서 추출한 이메일: " + email);
+
+        // 작성자를 DB에서 찾기
+        UserEntity nickname = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         FishingTripEntity post;
 
@@ -48,6 +79,7 @@ public class FishingTripService {
                     .title(fishingTripDto.getTitle())
                     .location(fishingTripDto.getLocation())
                     .detail(fishingTripDto.getDetail())
+                    .author(nickname) // 작성자 추가
                     .fishes(new ArrayList<>()) // ✅ 빈 리스트 추가 (null 방지)
                     .images(new ArrayList<>()) // ✅ 빈 리스트 추가 (null 방지)
                     .build();
@@ -56,6 +88,11 @@ public class FishingTripService {
         } else {
             post = fishingTripRepository.findById(fishingTripDto.getId())
                     .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+            // 작성자가 일치하는지 확인 (수정 권한 체크)
+            if(!post.getAuthor().getEmail().equals(email)){
+                throw new RuntimeException("게시글을 수정할 권한이 없습니다.");
+            }
 
             post.setCate(fishingTripDto.getCate());
             post.setTitle(fishingTripDto.getTitle());
@@ -143,6 +180,7 @@ public class FishingTripService {
                 .title(post.getTitle())
                 .location(post.getLocation())
                 .detail(post.getDetail())
+                .authorNickname(post.getAuthor().getNickname()) // ✅ 작성자 닉네임 추가
                 .date(post.getDate().toString())
                 .images(post.getImages() != null
                         ? post.getImages().stream().map(FishingTripImageEntity::getImageUrl).collect(Collectors.toList())
@@ -170,6 +208,7 @@ public class FishingTripService {
                 .cate(post.getCate())
                 .title(post.getTitle())
                 .detail(post.getDetail())
+                .authorNickname(post.getAuthor().getNickname()) // ✅ 작성자 닉네임 추가
                 .date(post.getDate().toString())
                 .viewCount(post.getViewCount()) // 조회수
                 .images(post.getImages().stream()
@@ -202,6 +241,7 @@ public class FishingTripService {
                 .title(post.getTitle())
                 .location(post.getLocation())
                 .detail(post.getDetail())
+                .authorNickname(post.getAuthor().getNickname()) // ✅ 작성자 닉네임 추가
                 .date(post.getDate().toString())
                 .viewCount(post.getViewCount()) // 조회수
                 .images(post.getImages() != null

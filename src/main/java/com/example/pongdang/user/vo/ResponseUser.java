@@ -1,13 +1,15 @@
-package com.example.pongdang.user.dto;
+package com.example.pongdang.user.vo;
 
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Data
 @AllArgsConstructor
-public class KakaoUserDto {
+@Builder
+public class ResponseUser {
+
+    private Long id;
     private String email;
     private String nickname;
 }

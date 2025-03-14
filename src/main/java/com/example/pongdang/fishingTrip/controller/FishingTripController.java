@@ -32,10 +32,14 @@ public class FishingTripController {
     public ResponseEntity<ResponseFishingTrip> saveBoard(
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
             @RequestParam Map<String, MultipartFile> fishImages, // ✅ Map<String, MultipartFile>로 변경
-            @RequestPart(value = "data") FishingTripDto fishingTripDto
+            @RequestPart(value = "data") FishingTripDto fishingTripDto,
+            @RequestHeader("Authorization") String jwtToken // JWT 토큰 추가
     ) {
 
-        return ResponseEntity.ok(fishingTripService.saveBoard(fishingTripDto, images, fishImages)); // ✅ fishImages 함께 전달
+        // Bearer 제거 후 실제 토큰 값만 추출
+        String token = jwtToken.replace("Bearer ", "");
+
+        return ResponseEntity.ok(fishingTripService.saveBoard(fishingTripDto, images, fishImages, jwtToken)); // ✅ fishImages 함께 전달
     }
 
 
@@ -48,14 +52,14 @@ public class FishingTripController {
 
     // 특정 게시글 조회 API
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseFishingTrip> getFishingTripById(@PathVariable Long id) {
+    public ResponseEntity<ResponseFishingTrip> getFishingTripById(@PathVariable("id") Long id) {
         ResponseFishingTrip post = fishingTripService.getFishingTripById(id);
         return ResponseEntity.ok(post);
     }
 
     // 특정 게시글 삭제 API
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFishingTrip(@PathVariable Long id){
+    public ResponseEntity<String> deleteFishingTrip(@PathVariable("id") Long id){
         fishingTripService.deleteFishingTrip(id);
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
