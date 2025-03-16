@@ -1,7 +1,10 @@
 package com.example.pongdang.user.entity;
 
+import com.example.pongdang.fishingTrip.entity.FishingTripEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,4 +21,11 @@ public class UserEntity {
     private String email;
 
     private String nickname;
+
+    // 🔹 회원이 작성한 게시글 (회원 삭제 시 함께 삭제됨)
+    @OneToMany(
+            mappedBy = "author",
+            cascade = CascadeType.REMOVE, // 회원 삭제 시, 관련 게시글도 삭제됨.
+            orphanRemoval = true) // 회원이 삭제되면 게시글이 자동으로 고아 객체가 되어 삭제됨.
+    private List<FishingTripEntity> fishingTrips;
 }

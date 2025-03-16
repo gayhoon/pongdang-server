@@ -47,12 +47,14 @@ public class AuthController {
             cookie.setSecure(false); // HTTPS 환경에서는 true
             cookie.setPath("/");
             cookie.setMaxAge(60 * 60); // 1시간
-            response.addCookie(cookie);
+            cookie.setDomain("localhost"); // ✅ 도메인 설정 (클라이언트 & 서버 공유)
+            cookie.setAttribute("SameSite", "None"); // ✅ 추가!
+            response.addHeader("Set-Cookie", "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None"); // ✅ SameSite=None 설정 추가
 
             // JSON 형식으로 응답 반환
             Map<String, String> responseBody = Map.of(
                     "message", "Login successful",
-                    "jwt", jwtToken,  // ✅ 응답에 JWT 추가!
+                    "jwt", jwtToken,  // 응답에 JWT 추가!
                     "email", user.getEmail(),
                     "nickname", user.getNickname()
             );
@@ -62,6 +64,22 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("카카오 로그인 실패");
         }
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        // 쿠키 삭제 (쿠키 유효시간 0으로 설정)
+        Cookie cookie = new Cookie("jwt", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // HTTPS 환경이면 true
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setDomain("localhost"); // 로컬 환경에서는 명시적으로 추가
+        cookie.setAttribute("SameSite", "None"); // ✅ 추가!
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     // 🔹 카카오 `access_token` 요청

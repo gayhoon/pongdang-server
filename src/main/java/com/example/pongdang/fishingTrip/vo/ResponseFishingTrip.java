@@ -18,7 +18,7 @@ public class ResponseFishingTrip {
     private String authorNickname;
     private String date;
     private int viewCount; // 조회수
-    private List<String> images; // ✅ 여러 개의 이미지 URL을 저장
+    private List<String> images; // 여러 개의 이미지 URL을 저장
     private List<FishingTripFishDto> fishes; // 여러 마리 물고기 정보 포함
 
     @Getter

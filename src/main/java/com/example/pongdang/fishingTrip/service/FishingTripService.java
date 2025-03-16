@@ -46,20 +46,34 @@ public class FishingTripService {
         this.userRepository = userRepository;
     }
 
-    // ✅ 게시글 저장 (신규 & 수정)
+    // 게시글 저장 (신규 & 수정)
     @Transactional
     public ResponseFishingTrip saveBoard(FishingTripDto fishingTripDto,
                                          List<MultipartFile> images,
                                          Map<String, MultipartFile> fishImages,
                                          @RequestHeader("Authorization") String authorizationHeader) {
 
-        System.out.println("🟢 받은 Authorization 헤더: " + authorizationHeader);
+        System.out.println("받은 Authorization 헤더: " + authorizationHeader);
+
+        if (authorizationHeader == null) {
+            throw new RuntimeException("1 Authorization 헤더가 올바르지 않습니다.이거");
+        }
+
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("2 Authorization 헤더가 올바르지 않습니다.이거");
+        }
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new RuntimeException("❌ Authorization 헤더가 올바르지 않습니다.");
         }
 
-        String jwtToken = authorizationHeader.replace("Bearer ", "").trim(); // ✅ 중복 선언 제거 후 사용
+        // ✅ 수정: Bearer 없이도 허용하도록 변경
+        if (!authorizationHeader.startsWith("Bearer ") && authorizationHeader.length() > 20) {
+            authorizationHeader = "Bearer " + authorizationHeader;
+            throw new RuntimeException("test2");
+        }
+
+        String jwtToken = authorizationHeader.replace("Bearer ", "").trim(); // 중복 선언 제거 후 사용
 
         System.out.println("🟢 추출된 JWT 토큰: '" + jwtToken + "'");
 
@@ -80,8 +94,8 @@ public class FishingTripService {
                     .location(fishingTripDto.getLocation())
                     .detail(fishingTripDto.getDetail())
                     .author(nickname) // 작성자 추가
-                    .fishes(new ArrayList<>()) // ✅ 빈 리스트 추가 (null 방지)
-                    .images(new ArrayList<>()) // ✅ 빈 리스트 추가 (null 방지)
+                    .fishes(new ArrayList<>()) // 빈 리스트 추가 (null 방지)
+                    .images(new ArrayList<>()) // 빈 리스트 추가 (null 방지)
                     .build();
             fishingTripRepository.save(post);
             fishingTripRepository.flush(); // JPA가 즉시 INSERT 실행하여 ID가 생성되도록 강제(신규글 작성 시 client가 바로 생성된 게시글의 id를 받을 수 있도록)
@@ -112,23 +126,23 @@ public class FishingTripService {
             fishingTripRepository.save(post);
         }
 
-        // ✅ 삭제할 이미지가 존재하면 DB에서 삭제
+        // 삭제할 이미지가 존재하면 DB에서 삭제
         if (fishingTripDto.getDeletedImages() != null && !fishingTripDto.getDeletedImages().isEmpty()) {
             System.out.println("🗑 삭제할 이미지 URL 목록: " + fishingTripDto.getDeletedImages());
 
-            // ✅ DB에서 이미지 URL이 `deletedImages` 목록에 포함된 것만 삭제
+            // DB에서 이미지 URL이 `deletedImages` 목록에 포함된 것만 삭제
             fishingTripImageRepository.deleteByFishingTripIdAndImageUrlIn(post.getId(), fishingTripDto.getDeletedImages());
 
-            // ✅ 삭제 후 남아있는 이미지 목록 확인 (디버깅용)
+            // 삭제 후 남아있는 이미지 목록 확인 (디버깅용)
             List<FishingTripImageEntity> remainingImages = fishingTripImageRepository.findByFishingTripId(post.getId());
-            System.out.println("✅ 삭제 후 남은 이미지 개수: " + remainingImages.size());
+            System.out.println("삭제 후 남은 이미지 개수: " + remainingImages.size());
         }
 
-        // ✅ 새로운 이미지 추가
+        // 새로운 이미지 추가
         if (images != null && !images.isEmpty()) {
             List<FishingTripImageEntity> imageEntities = new ArrayList<>();
             for (MultipartFile image : images) {
-                String fileUrl = fileStorageService.saveFile(image); // ✅ 절대 경로 반환됨
+                String fileUrl = fileStorageService.saveFile(image); // 절대 경로 반환됨
 
                 FishingTripImageEntity imageEntity = FishingTripImageEntity.builder()
                         .imageUrl(fileUrl)
@@ -139,7 +153,7 @@ public class FishingTripService {
             fishingTripImageRepository.saveAll(imageEntities);
         }
 
-        // ✅ 물고기가 존재할 경우만 물고기 정보 저장
+        // 물고기가 존재할 경우만 물고기 정보 저장
         if (fishingTripDto.getFishes() != null && !fishingTripDto.getFishes().isEmpty()) {
 
             // 기존 물고기 정보 삭제
@@ -164,8 +178,8 @@ public class FishingTripService {
                         .size(fish.getSize())
                         .nickname(fish.getNickname())
                         .description(fish.getDescription())
-                        .imageUrl(fishImageUrl) // ✅ 이미지 URL 저장
-                        .fishingTrip(post) // ✅ 게시글과 연관관계 설정
+                        .imageUrl(fishImageUrl) // 이미지 URL 저장
+                        .fishingTrip(post) // 게시글과 연관관계 설정
                         .build();
 
             }).collect(Collectors.toList());
@@ -180,11 +194,11 @@ public class FishingTripService {
                 .title(post.getTitle())
                 .location(post.getLocation())
                 .detail(post.getDetail())
-                .authorNickname(post.getAuthor().getNickname()) // ✅ 작성자 닉네임 추가
+                .authorNickname(post.getAuthor().getNickname()) // 작성자 닉네임 추가
                 .date(post.getDate().toString())
                 .images(post.getImages() != null
                         ? post.getImages().stream().map(FishingTripImageEntity::getImageUrl).collect(Collectors.toList())
-                        : new ArrayList<>()) // ✅ images가 null일 경우 빈 리스트 반환
+                        : new ArrayList<>()) // images가 null일 경우 빈 리스트 반환
                 .fishes(post.getFishes() != null
                         ? post.getFishes().stream().map(fish -> ResponseFishingTrip.FishingTripFishDto.builder()
                                 .species(fish.getSpecies())
@@ -194,12 +208,12 @@ public class FishingTripService {
                                 .imageUrl(fish.getImageUrl())
                                 .build())
                         .collect(Collectors.toList())
-                        : new ArrayList<>()) // ✅ fishes가 null이면 빈 리스트 반환
+                        : new ArrayList<>()) // fishes가 null이면 빈 리스트 반환
                 .build();
     }
 
 
-    // ✅ 모든 게시글 조회
+    // 모든 게시글 조회
     public List<ResponseFishingTrip> getAllBoards() {
         List<FishingTripEntity> posts = fishingTripRepository.findAllByOrderByIdDesc();
 
@@ -208,7 +222,7 @@ public class FishingTripService {
                 .cate(post.getCate())
                 .title(post.getTitle())
                 .detail(post.getDetail())
-                .authorNickname(post.getAuthor().getNickname()) // ✅ 작성자 닉네임 추가
+                .authorNickname(post.getAuthor().getNickname()) // 작성자 닉네임 추가
                 .date(post.getDate().toString())
                 .viewCount(post.getViewCount()) // 조회수
                 .images(post.getImages().stream()
@@ -241,7 +255,7 @@ public class FishingTripService {
                 .title(post.getTitle())
                 .location(post.getLocation())
                 .detail(post.getDetail())
-                .authorNickname(post.getAuthor().getNickname()) // ✅ 작성자 닉네임 추가
+                .authorNickname(post.getAuthor().getNickname()) // 작성자 닉네임 추가
                 .date(post.getDate().toString())
                 .viewCount(post.getViewCount()) // 조회수
                 .images(post.getImages() != null
@@ -263,20 +277,20 @@ public class FishingTripService {
     // 특정 게시글 삭제 기능
     @Transactional
     public void deleteFishingTrip(Long id) {
-        // ✅ 게시글 존재 여부 확인
+        // 게시글 존재 여부 확인
         if (!fishingTripRepository.existsById(id)) {
             throw new RuntimeException("삭제할 게시글이 존재하지 않습니다.");
         }
 
-        // ✅ 연관된 이미지 데이터 삭제
+        // 연관된 이미지 데이터 삭제
         fishingTripImageRepository.deleteByFishingTripId(id);
 
-        // ✅ 연관된 물고기 데이터 삭제
+        // 연관된 물고기 데이터 삭제
         fishingTripFishRepository.deleteByFishingTripId(id);
 
-        // ✅ 게시글 삭제
+        // 게시글 삭제
         fishingTripRepository.deleteById(id);
 
-        System.out.println("✅ 게시글 삭제 완료: ID " + id);
+        System.out.println("게시글 삭제 완료: ID " + id);
     }
 }

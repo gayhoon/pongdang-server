@@ -19,11 +19,11 @@ public class FishingTripDto {
     private String title;
     private String location;
     private String detail;
-    private String authorEmail; // ✅ 작성자 이메일 추가
-    private List<String> images; // ✅ 여러 개의 이미지 URL 저장
-    private List<FishingTripFishDto> fishes; // ✅ 여러 마리 물고기 정보 포함
-    private List<String> existingImages; // ✅ 유지할 기존 이미지 목록
-    private List<String> deletedImages;  // ✅ 삭제할 이미지 목록 추가
+    private String authorEmail; // 작성자 이메일 추가
+    private List<String> images; // 여러 개의 이미지 URL 저장
+    private List<FishingTripFishDto> fishes; // 여러 마리 물고기 정보 포함
+    private List<String> existingImages; // 유지할 기존 이미지 목록
+    private List<String> deletedImages;  // 삭제할 이미지 목록 추가
 
     public FishingTripEntity toEntity(UserEntity author){ // UserEntity author 추가
         FishingTripEntity fishingTripEntity = FishingTripEntity.builder()
@@ -32,14 +32,14 @@ public class FishingTripDto {
                 .title(this.title)
                 .location(this.location)
                 .detail(this.detail)
-                .author(author) // ✅ UserEntity를 저장해야 함!
+                .author(author) // UserEntity를 저장해야 함!
                 .build();
 
-        // ✅ 물고기 정보가 있을 경우 변환하여 추가
+        // 물고기 정보가 있을 경우 변환하여 추가
         if (this.fishes != null) {
             List<FishingTripFishEntity> fishEntities = this.fishes.stream()
                     .map(FishingTripFishDto::toEntity)
-                    .peek(fish -> fish.setFishingTrip(fishingTripEntity)) // ✅ 조행기와 연관 설정
+                    .peek(fish -> fish.setFishingTrip(fishingTripEntity)) // 조행기와 연관 설정
                     .collect(Collectors.toList());
             fishingTripEntity.setFishes(fishEntities);
         }

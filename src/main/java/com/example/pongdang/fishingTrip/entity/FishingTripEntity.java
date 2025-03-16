@@ -25,12 +25,12 @@ public class FishingTripEntity {
     private String location;
     private String detail;
 
-    @Column(updatable = false) // ✅ 작성일은 수정되지 않도록 설정
+    @Column(updatable = false) // 작성일은 수정되지 않도록 설정
     private LocalDate date;
 
     @PrePersist
     protected void onCreate() {
-        this.date = LocalDate.now(); // ✅ 자동으로 오늘 날짜 설정
+        this.date = LocalDate.now(); // 자동으로 오늘 날짜 설정
     }
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

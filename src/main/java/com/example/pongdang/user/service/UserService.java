@@ -7,6 +7,7 @@ import com.example.pongdang.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.pongdang.fishingTrip.repository.FishingTripRepository;
 
 import java.util.Optional;
 
@@ -15,28 +16,9 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository; // 데이터베이스를 다룰 수 있도록 연결
+    private final FishingTripRepository fishingTripRepository; // 추가
 
-//    @Transactional // 데이터 저장 시 트랜잭션(안전하게 저장) 적용
-//    public UserEntity saveUser(UserDto userDto) {
-//
-//        // 같은 이메일이 존재하는지 확인
-//        Optional<UserEntity> existingUser = userRepository.findByEmail(userDto.getEmail());
-//
-//        // 이미 존재하는 사용자인 경우
-//        if(existingUser.isPresent()){
-//            // 사용자 정보 반환
-//            return existingUser.get();
-//        }
-//
-//        // 존재하지 않는 사용자인 경우 신규저장
-//        UserEntity user = UserEntity.builder() // 빌더 패턴 사용
-//                .email(userDto.getEmail())
-//                .nickname(userDto.getNickname())
-//                .build();
-//
-//        return userRepository.save(user); // 저장 후 `UserEntity` 반환
-//    }
-
+    // 사용자 저장
     @Transactional // 데이터 저장 시 트랜잭션(안전하게 저장) 적용
     public UserEntity saveUser(KakaoUserDto kakaoUser) {
 
@@ -47,5 +29,19 @@ public class UserService {
                                 .nickname(kakaoUser.getNickname())
                                 .build()
                         )));
+    }
+
+    // 사용자 삭제
+    @Transactional
+    public void deleteUser(Long userId) {
+        // 1️⃣ 회원 조회
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        // 2️⃣ 회원이 작성한 모든 게시글 삭제
+        fishingTripRepository.deleteByAuthor(user); // FishingTripRepository를 통해 게시글 삭제
+
+        // 3️⃣ 회원 삭제
+        userRepository.delete(user);
     }
 }

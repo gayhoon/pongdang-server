@@ -16,7 +16,7 @@ public class FishingTripImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageUrl; // ✅ 저장된 이미지 URL
+    private String imageUrl; // 저장된 이미지 URL
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fishing_trip_id", nullable = false)

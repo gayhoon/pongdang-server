@@ -15,6 +15,9 @@ logging:
 file:
   upload-dir: C:/pongdang-server/uploads # 이미지 파일 업로드 경로(로컬)
 
+jwt:
+  secret: "b0j48K7h6YvB5pN8tQ2m3X4rW1zT9fG7"
+
 # H2 Database
 spring:
   application:
@@ -39,5 +42,5 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 50MB   # ✅ 업로드 가능한 파일 크기 (개별 파일)
-      max-request-size: 100MB # ✅ 전체 요청 크기 (파일 여러 개 포함)
+      max-file-size: 50MB   # 업로드 가능한 파일 크기 (개별 파일)
+      max-request-size: 100MB # 전체 요청 크기 (파일 여러 개 포함)
