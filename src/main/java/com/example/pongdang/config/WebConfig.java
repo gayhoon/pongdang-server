@@ -1,4 +1,4 @@
-package com.example.pongdang.fishingTrip.config;
+package com.example.pongdang.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +17,9 @@ public class WebConfig {
                 registry.addMapping("/**") // 모든 경로에 대해 CORS 허용
                         .allowedOriginPatterns("*") // 프론트엔드 URL 허용
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowCredentials(true) // ✅ 쿠키 전송 허용
+                        .allowCredentials(true) // 쿠키 전송 허용
                         .allowedHeaders("*")
-                        .exposedHeaders("Set-Cookie"); // ✅ JWT 헤더 노출
+                        .exposedHeaders("Set-Cookie"); // JWT 헤더 노출
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry){

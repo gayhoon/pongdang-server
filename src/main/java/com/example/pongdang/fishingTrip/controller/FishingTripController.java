@@ -30,7 +30,7 @@ import java.util.UUID;
 public class FishingTripController {
 
     private final FishingTripService fishingTripService;
-    private final JwtTokenProvider jwtProvider; // ✅ 추가 (JwtTokenProvider 주입)
+    private final JwtTokenProvider jwtProvider; // 추가 (JwtTokenProvider 주입)
 
     // 게시글 저장 (신규 등록 & 수정) - JSON 데이터 + 이미지 처리
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}) // multipart/form-data 요청 허용
@@ -41,16 +41,7 @@ public class FishingTripController {
             HttpServletRequest request // HttpServletRequest에서 JWT 쿠키 가져오기
     ) {
 
-        // ✅ 1️⃣ 요청된 쿠키 확인 (디버깅 로그 추가)
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                System.out.println("🍪 쿠키 이름: " + cookie.getName() + " | 값: " + cookie.getValue());
-            }
-        } else {
-            System.out.println("❌ 쿠키가 없습니다.");
-        }
-
-        // ✅ 2️⃣ JWT 쿠키 가져오기
+        // JWT 쿠키 가져오기
         String jwtToken = null;
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
@@ -61,7 +52,7 @@ public class FishingTripController {
             }
         }
 
-        // ✅ 3️⃣ JWT 검증
+        // JWT 검증
         if (jwtToken == null || !jwtProvider.validateToken(jwtToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }

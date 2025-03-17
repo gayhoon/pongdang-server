@@ -59,20 +59,6 @@ public class FishingTripService {
             throw new RuntimeException("1 Authorization 헤더가 올바르지 않습니다.이거");
         }
 
-        if (!authorizationHeader.startsWith("Bearer ")) {
-            throw new RuntimeException("2 Authorization 헤더가 올바르지 않습니다.이거");
-        }
-
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new RuntimeException("❌ Authorization 헤더가 올바르지 않습니다.");
-        }
-
-        // ✅ 수정: Bearer 없이도 허용하도록 변경
-        if (!authorizationHeader.startsWith("Bearer ") && authorizationHeader.length() > 20) {
-            authorizationHeader = "Bearer " + authorizationHeader;
-            throw new RuntimeException("test2");
-        }
-
         String jwtToken = authorizationHeader.replace("Bearer ", "").trim(); // 중복 선언 제거 후 사용
 
         System.out.println("🟢 추출된 JWT 토큰: '" + jwtToken + "'");

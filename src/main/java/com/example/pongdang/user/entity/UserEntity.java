@@ -1,6 +1,7 @@
 package com.example.pongdang.user.entity;
 
 import com.example.pongdang.fishingTrip.entity.FishingTripEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -29,27 +29,27 @@ public class AuthController {
         System.out.println("카카오 로그인 요청, code: " + code);
 
         try {
-            // 1️⃣ 백엔드에서 카카오 `access_token` 요청
+            // 백엔드에서 카카오 `access_token` 요청
             String accessToken = getKakaoAccessToken(code);
 
-            // 2️⃣ `access_token`을 사용해 카카오 사용자 정보 요청
+            // `access_token`을 사용해 카카오 사용자 정보 요청
             KakaoUserDto kakaoUser = getKakaoUserInfo(accessToken);
 
-            // 3️⃣ 사용자 정보 저장 (기존 사용자면 조회)
+            // 사용자 정보 저장 (기존 사용자면 조회)
             UserEntity user = userService.saveUser(kakaoUser);
 
-            // 4️⃣ JWT 생성
+            // JWT 생성
             String jwtToken = jwtProvider.createToken(user.getEmail());
 
-            // 5️⃣ HTTP-only 쿠키로 JWT 저장 (보안 강화)
+            // HTTP-only 쿠키로 JWT 저장 (보안 강화)
             Cookie cookie = new Cookie("jwt", jwtToken);
             cookie.setHttpOnly(true);
             cookie.setSecure(false); // HTTPS 환경에서는 true
             cookie.setPath("/");
             cookie.setMaxAge(60 * 60); // 1시간
-            cookie.setDomain("localhost"); // ✅ 도메인 설정 (클라이언트 & 서버 공유)
-            cookie.setAttribute("SameSite", "None"); // ✅ 추가!
-            response.addHeader("Set-Cookie", "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None"); // ✅ SameSite=None 설정 추가
+            cookie.setDomain("localhost"); // 도메인 설정 (클라이언트 & 서버 공유)
+            cookie.setAttribute("SameSite", "None"); // 추가!
+            response.addHeader("Set-Cookie", "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None"); // SameSite=None 설정 추가
 
             // JSON 형식으로 응답 반환
             Map<String, String> responseBody = Map.of(
@@ -76,7 +76,7 @@ public class AuthController {
         cookie.setPath("/");
         cookie.setMaxAge(0);
         cookie.setDomain("localhost"); // 로컬 환경에서는 명시적으로 추가
-        cookie.setAttribute("SameSite", "None"); // ✅ 추가!
+        cookie.setAttribute("SameSite", "None"); // 추가!
         response.addCookie(cookie);
 
         return ResponseEntity.ok("Logged out successfully");
@@ -123,20 +123,20 @@ public class AuthController {
 
         Map<String, Object> kakaoAccount = (Map<String, Object>) response.getBody().get("kakao_account");
         if (kakaoAccount == null) {
-            System.out.println("⚠️ kakao_account가 null입니다!");
+            System.out.println("kakao_account가 null입니다!");
             return new KakaoUserDto(null, null);
         }
 
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
         if (profile == null) {
-            System.out.println("⚠️ profile이 null입니다!");
+            System.out.println("profile이 null입니다!");
             return new KakaoUserDto(null, null);
         }
 
         String email = (String) kakaoAccount.get("email");
         String nickname = (String) profile.get("nickname");
 
-        System.out.println("🎯 가져온 사용자 정보: email=" + email + ", nickname=" + nickname);
+        System.out.println("가져온 사용자 정보: email=" + email + ", nickname=" + nickname);
 
         return new KakaoUserDto(email, nickname);
     }

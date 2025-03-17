@@ -49,11 +49,12 @@ public class UserController {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
-        // ✅ 디버깅: 모든 쿠키 출력
+        // 디버깅: 모든 쿠키 출력
         for (Cookie cookie : cookies) {
             System.out.println("🍪 쿠키 이름: " + cookie.getName() + " | 값: " + cookie.getValue());
         }
 
+        // JWT 쿠키 찾기
         String token = Arrays.stream(request.getCookies())
                 .filter(cookie -> "jwt".equals(cookie.getName()))
                 .map(Cookie::getValue)
@@ -70,38 +71,50 @@ public class UserController {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
+        // JWT에서 이메일 추출 후 DB 조회
         String email = jwtProvider.getEmailFromToken(token);
-        Optional<UserEntity> user = userRepository.findByEmail(email);
-        System.out.println("🔍 DB에서 찾은 사용자: " + (user.isPresent() ? user.get() : "없음"));
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
 
-        return user.<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(404).body("User not found"));
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        UserEntity userEntity = userOptional.get();
+        System.out.println("🔍 DB에서 찾은 사용자: " + userEntity);
+
+        // **DTO로 변환 후 반환 (순환 참조 방지)**
+        ResponseUser responseUser = ResponseUser.builder()
+                .email(userEntity.getEmail())
+                .nickname(userEntity.getNickname())
+                .build();
+
+        return ResponseEntity.ok(responseUser);
     }
 
     // 회원탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<String> deleteUser(HttpServletRequest request, HttpServletResponse response) {
-        // 1️⃣ JWT 쿠키에서 토큰 가져오기
+        // JWT 쿠키에서 토큰 가져오기
         String token = Arrays.stream(request.getCookies())
                 .filter(cookie -> "jwt".equals(cookie.getName()))
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElse(null);
 
-        // 2️⃣ 토큰 검증
+        // 토큰 검증
         if (token == null || !jwtProvider.validateToken(token)) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
-        // 3️⃣ JWT에서 **이메일**을 가져와 회원 ID 조회
+        // JWT에서 **이메일**을 가져와 회원 ID 조회
         String email = jwtProvider.getEmailFromToken(token);
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        // 4️⃣ 회원 삭제 (ID를 넘겨줌)
+        // 회원 삭제 (ID를 넘겨줌)
         userService.deleteUser(user.getId());
 
-        // 5️⃣ JWT 쿠키 삭제
+        // JWT 쿠키 삭제
         Cookie cookie = new Cookie("jwt", null);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
