@@ -23,6 +23,8 @@ public class UserEntity {
 
     private String nickname;
 
+    private String profileImageUrl; // ✅ 추가: 프로필 이미지 URL
+
     // 🔹 회원이 작성한 게시글 (회원 삭제 시 함께 삭제됨)
     @OneToMany(
             mappedBy = "author",

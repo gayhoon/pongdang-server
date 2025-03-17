@@ -4,14 +4,11 @@ import com.example.pongdang.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
@@ -21,11 +18,15 @@ public class SecurityConfig {
 
     private final JwtCookieAuthFilter jwtCookieAuthFilter;
     private final UserService userService; // UserService 활용
+    private final CorsConfigurationSource corsConfigurationSource; // ✅ CorsConfig 사용
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable())  // 필요 시 수정
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin()) // iframe 허용 (같은 도메인)
+                )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ✅ CORS 설정 적용
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(auth -> auth
@@ -40,15 +41,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(List.of(authenticationProvider()));
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
-        return provider;
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager() {
+//        return new ProviderManager(List.of(authenticationProvider()));
+//    }
+//
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setUserDetailsService(userService);
+//        return provider;
+//    }
 }

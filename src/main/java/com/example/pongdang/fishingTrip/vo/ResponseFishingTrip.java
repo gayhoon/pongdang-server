@@ -16,6 +16,7 @@ public class ResponseFishingTrip {
     private String location;
     private String detail;
     private String authorNickname;
+    private String authorProfileImage;
     private String date;
     private int viewCount; // 조회수
     private List<String> images; // 여러 개의 이미지 URL을 저장

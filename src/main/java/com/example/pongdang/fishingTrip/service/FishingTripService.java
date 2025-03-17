@@ -53,15 +53,7 @@ public class FishingTripService {
                                          Map<String, MultipartFile> fishImages,
                                          @RequestHeader("Authorization") String authorizationHeader) {
 
-        System.out.println("받은 Authorization 헤더: " + authorizationHeader);
-
-        if (authorizationHeader == null) {
-            throw new RuntimeException("1 Authorization 헤더가 올바르지 않습니다.이거");
-        }
-
         String jwtToken = authorizationHeader.replace("Bearer ", "").trim(); // 중복 선언 제거 후 사용
-
-        System.out.println("🟢 추출된 JWT 토큰: '" + jwtToken + "'");
 
         // JWT에서 사용자 이메일 추출
         String email = jwtProvider.getEmailFromToken(jwtToken);
@@ -242,6 +234,7 @@ public class FishingTripService {
                 .location(post.getLocation())
                 .detail(post.getDetail())
                 .authorNickname(post.getAuthor().getNickname()) // 작성자 닉네임 추가
+                .authorProfileImage(post.getAuthor().getProfileImageUrl()) // 프로필 이미지 추가
                 .date(post.getDate().toString())
                 .viewCount(post.getViewCount()) // 조회수
                 .images(post.getImages() != null

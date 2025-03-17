@@ -16,7 +16,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // 모든 경로에 대해 CORS 허용
                         .allowedOriginPatterns("*") // 프론트엔드 URL 허용
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
                         .allowCredentials(true) // 쿠키 전송 허용
                         .allowedHeaders("*")
                         .exposedHeaders("Set-Cookie"); // JWT 헤더 노출
@@ -26,6 +26,10 @@ public class WebConfig {
                 // 클라이언트가 'http://localhost:8090/uploads/파일명'으로 이미지 접근 가능하도록 설정
                 registry.addResourceHandler("/uploads/**")
                         .addResourceLocations("file:uploads/") // 로컬 파일 시스템에서 가져옴
+                        .setCachePeriod(3600); // 캐시 유지 시간 (1시간)
+
+                registry.addResourceHandler("/uploads/profile/**")
+                        .addResourceLocations("file:uploads/profile/")
                         .setCachePeriod(3600); // 캐시 유지 시간 (1시간)
             }
         };
