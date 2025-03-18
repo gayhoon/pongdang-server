@@ -4,7 +4,7 @@ spring:
       on-profile: prod  # 'prod' 프로필에서만 적용
 
 server:
-  url: "http://43.201.88.18:8090"
+  url: "http://43.201.88.18:80"
   address: 0.0.0.0  # 외부 접근 가능하도록 설정
 
 file:
