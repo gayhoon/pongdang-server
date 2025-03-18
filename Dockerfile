@@ -1,19 +1,13 @@
-# 1. 기본 이미지 설정 (JDK 17 사용)
-FROM openjdk:17-jdk-slim AS build
+# 1. 베이스 이미지 설정
+FROM openjdk:17-jdk
 
 # 2. 작업 디렉토리 설정
 WORKDIR /app
 
-# 3. Gradle 캐시를 활용할 수 있도록 소스 코드 복사
+# 3. 실행 권한 추가 및 빌드 진행
 COPY . /app
+RUN chmod +x ./gradlew  # 실행 권한 추가
+RUN ./gradlew clean build --no-daemon  # Gradle 빌드 실행
 
-# 4. Gradle 빌드 실행 (JAR 파일 생성)
-RUN ./gradlew clean build --no-daemon
-
-# 5. 빌드된 JAR 파일을 실행 환경으로 복사
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-COPY --from=build /app/build/libs/*.jar app.jar
-
-# 6. 컨테이너 실행 시 JAR 파일 실행
-CMD ["java", "-jar", "app.jar"]
+# 4. JAR 파일 실행
+CMD ["java", "-jar", "build/libs/*.jar"]
