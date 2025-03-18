@@ -5,9 +5,6 @@ FROM openjdk:17-jdk
 WORKDIR /app
 
 # 3. 실행 권한 추가 및 빌드 진행
-COPY . /app
-RUN chmod +x ./gradlew  # 실행 권한 추가
-RUN ./gradlew clean build --no-daemon  # Gradle 빌드 실행
+COPY target/dtect-springboot-0.0.1-SNAPSHOT.jar app.jar
 
-# 4. JAR 파일 실행
-CMD ["java", "-jar", "build/libs/*.jar"]
+EXPOSE 8080
