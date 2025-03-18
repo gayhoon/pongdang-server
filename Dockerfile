@@ -1,22 +1,19 @@
-# 1. OpenJDK 17 기반의 슬림 버전 사용
-FROM openjdk:17-jdk-slim
+# 1. 기본 이미지 설정 (JDK 17 사용)
+FROM openjdk:17-jdk-slim AS build
 
 # 2. 작업 디렉토리 설정
 WORKDIR /app
 
-# 3. Gradle 설치 (SDKMAN 대신 직접 다운로드)
-RUN apt-get update && apt-get install -y curl unzip && \
-    curl -sL https://services.gradle.org/distributions/gradle-8.0-bin.zip -o gradle.zip && \
-    unzip gradle.zip -d /opt/gradle && \
-    rm gradle.zip && \
-    ln -s /opt/gradle/gradle-8.0/bin/gradle /usr/bin/gradle
-
-# 4. 프로젝트 소스 복사 및 빌드
+# 3. Gradle 캐시를 활용할 수 있도록 소스 코드 복사
 COPY . /app
-RUN gradle build --no-daemon
 
-# 5. JAR 파일을 컨테이너 내부로 복사
-COPY build/libs/*.jar app.jar
+# 4. Gradle 빌드 실행 (JAR 파일 생성)
+RUN ./gradlew clean build --no-daemon
 
-# 6. 실행 명령어
+# 5. 빌드된 JAR 파일을 실행 환경으로 복사
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# 6. 컨테이너 실행 시 JAR 파일 실행
 CMD ["java", "-jar", "app.jar"]
