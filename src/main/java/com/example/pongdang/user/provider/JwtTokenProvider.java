@@ -1,4 +1,6 @@
 package com.example.pongdang.user.provider;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import io.jsonwebtoken.*;
@@ -89,6 +91,23 @@ public class JwtTokenProvider {
         } catch (JwtException e) {
             throw new RuntimeException("JWT 토큰이 유효하지 않습니다. 원인: " + e.getMessage());
         }
+    }
+
+    // JWT 쿠키에서 이메일 추출
+    public String getEmailFromRequest(HttpServletRequest request) {
+        String jwtToken = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    jwtToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (jwtToken == null || !validateToken(jwtToken)) {
+            return null;
+        }
+        return getEmailFromToken(jwtToken);
     }
 
 

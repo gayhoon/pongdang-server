@@ -70,9 +70,21 @@ public class FishingTripController {
 
     // 특정 게시글 조회 API
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseFishingTrip> getFishingTripById(@PathVariable("id") Long id) {
-        ResponseFishingTrip post = fishingTripService.getFishingTripById(id);
-        return ResponseEntity.ok(post);
+    public ResponseEntity<ResponseFishingTrip> getFishingTripById(
+            @PathVariable("id") Long id,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader // ✅ JWT 토큰 추가
+    ) {
+        // ✅ Authorization 헤더에서 Bearer 토큰 추출 (토큰이 없을 경우 대비)
+        String jwtToken = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
+                ? authorizationHeader.substring(7).trim()
+                : null;
+
+        try {
+            ResponseFishingTrip post = fishingTripService.getFishingTripById(id, jwtToken);
+            return ResponseEntity.ok(post);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // ✅ JWT 문제 시 401 응답
+        }
     }
 
     // 특정 게시글 삭제 API

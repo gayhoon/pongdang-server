@@ -15,4 +15,6 @@ public class ResponseFishingTripComment {
     private String authorProfileImage;
     private String content;
     private LocalDateTime createdAt;
+    private int likeCount;  // ✅ 좋아요 개수 추가
+    private boolean isLiked; // ✅ 사용자가 좋아요 눌렀는지 여부 추가
 }

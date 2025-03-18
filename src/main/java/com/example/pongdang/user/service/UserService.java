@@ -54,28 +54,11 @@ public class UserService {
 
     // ✅ [3] JWT 검증 후 사용자 엔티티 조회
     private Optional<UserEntity> getUserFromJwt(HttpServletRequest request) {
-        String email = getEmailFromRequest(request);
+        String email = jwtProvider.getEmailFromRequest(request);
         if (email == null) {
             return Optional.empty();
         }
         return userRepository.findByEmail(email);
-    }
-
-    // ✅ [4] JWT 쿠키에서 이메일 추출
-    private String getEmailFromRequest(HttpServletRequest request) {
-        String jwtToken = null;
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("jwt".equals(cookie.getName())) {
-                    jwtToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if (jwtToken == null || !jwtProvider.validateToken(jwtToken)) {
-            return null;
-        }
-        return jwtProvider.getEmailFromToken(jwtToken);
     }
 
     // ✅ [5] 닉네임 변경 서비스
@@ -119,7 +102,7 @@ public class UserService {
 
     // ✅ 프로필 이미지 업로드 서비스
     public String uploadProfileImage(MultipartFile file, HttpServletRequest request) {
-        String email = getEmailFromRequest(request);
+        String email = jwtProvider.getEmailFromRequest(request);
         if (email == null) {
             throw new RuntimeException("Unauthorized: JWT가 유효하지 않음");
         }

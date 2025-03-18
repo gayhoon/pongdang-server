@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,4 +32,7 @@ public class FishingTripCommentEntity {
 
     @Column(nullable = false) // 댓글 작성 시간
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true) // ✅ 댓글과 좋아요 관계 (1:N)
+    private Set<FishingTripCommentLikeEntity> likes = new HashSet<>();
 }

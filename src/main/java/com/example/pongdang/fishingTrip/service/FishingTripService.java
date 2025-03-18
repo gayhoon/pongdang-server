@@ -4,10 +4,12 @@ import com.example.pongdang.fishingTrip.dto.FishingTripDto;
 import com.example.pongdang.fishingTrip.entity.FishingTripEntity;
 import com.example.pongdang.fishingTrip.entity.FishingTripFishEntity;
 import com.example.pongdang.fishingTrip.entity.FishingTripImageEntity;
+import com.example.pongdang.fishingTrip.repository.FishingTripCommentLikeRepository;
 import com.example.pongdang.fishingTrip.repository.FishingTripFishRepository;
 import com.example.pongdang.fishingTrip.repository.FishingTripRepository;
 import com.example.pongdang.fishingTrip.repository.FishingTripImageRepository;
 import com.example.pongdang.fishingTrip.vo.ResponseFishingTrip;
+import com.example.pongdang.fishingTrip.vo.ResponseFishingTripComment;
 import com.example.pongdang.user.entity.UserEntity;
 import com.example.pongdang.user.provider.JwtTokenProvider;
 import com.example.pongdang.user.repository.UserRepository;
@@ -31,19 +33,22 @@ public class FishingTripService {
     private final FileStorageService fileStorageService;
     private final JwtTokenProvider jwtProvider; // JWT 검증을 위한 Provider 추가
     private final UserRepository userRepository; // 사용자 정보 조회를 위한 Repository 추가
+    private final FishingTripCommentLikeRepository likeRepository; // 좋아요 Repository 추가
 
     public FishingTripService(FishingTripRepository fishingTripRepository,
                               FishingTripImageRepository fishingTripImageRepository,
                               FishingTripFishRepository fishingTripFishRepository,
                               FileStorageService fileStorageService,
                               JwtTokenProvider jwtProvider,
-                              UserRepository userRepository) { // UserRepository 추가
+                              UserRepository userRepository,
+                              FishingTripCommentLikeRepository likeRepository) {
         this.fishingTripRepository = fishingTripRepository;
         this.fishingTripImageRepository = fishingTripImageRepository;
         this.fishingTripFishRepository = fishingTripFishRepository;
         this.fileStorageService = fileStorageService;
         this.jwtProvider = jwtProvider;
         this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
     }
 
     // 게시글 저장 (신규 & 수정)
@@ -215,17 +220,44 @@ public class FishingTripService {
                                 .imageUrl(fish.getImageUrl())
                                 .build())
                         .collect(Collectors.toList()))
+                .comments(post.getComments().stream()
+                        .map(comment -> ResponseFishingTripComment.builder()
+                                .id(comment.getId())
+                                .build())
+                        .collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
     }
 
     // 특정 게시글 조회 기능
-    public ResponseFishingTrip getFishingTripById(Long id) {
+    public ResponseFishingTrip getFishingTripById(Long id, String jwtToken) {
         FishingTripEntity post = fishingTripRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         // 조회수 증가
         post.increaseViewCount();
         fishingTripRepository.save(post); // 변경 사항 저장
+
+        // ✅ JWT 토큰이 없을 때 null 허용
+        String email = (jwtToken != null) ? jwtProvider.getEmailFromToken(jwtToken) : null;
+        UserEntity user = (email != null) ? userRepository.findByEmail(email).orElse(null) : null;
+
+        // ✅ 댓글 목록 + 좋아요 개수 포함
+        List<ResponseFishingTripComment> comments = post.getComments().stream()
+                .map(comment -> {
+                    int likeCount = likeRepository.countByComment(comment);
+                    boolean isLiked = (user != null) && likeRepository.findByCommentAndUser(comment, user).isPresent();
+
+                    return ResponseFishingTripComment.builder()
+                            .id(comment.getId())
+                            .authorNickname(comment.getUser().getNickname())
+                            .authorProfileImage(comment.getUser().getProfileImageUrl())
+                            .content(comment.getContent())
+                            .createdAt(comment.getCreatedAt())
+                            .likeCount(likeCount)  // ✅ 좋아요 개수 추가
+                            .isLiked(isLiked)      // ✅ 사용자가 좋아요 눌렀는지 추가
+                            .build();
+                })
+                .collect(Collectors.toList());
 
         return ResponseFishingTrip.builder()
                 .id(post.getId())
@@ -250,6 +282,7 @@ public class FishingTripService {
                                 .build())
                         .collect(Collectors.toList())
                         : new ArrayList<>())
+                .comments(comments)  // ✅ 좋아요 정보가 포함된 댓글 리스트 반환
                 .build();
     }
 

@@ -7,31 +7,42 @@ import com.example.pongdang.fishingTrip.vo.ResponseFishingTripComment;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.debug.DebugFilter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fishingTrip")
+@RequestMapping("/api/v1/fishingTrip/comments")
 @RequiredArgsConstructor
 public class FishingTripCommentController {
 
     private final FishingTripCommentService commentService;
 
-    // ✅ 댓글 작성 API
-    @PostMapping("/{postId}/comments")
+    // 댓글 작성 API
+    @PostMapping("/{commentId}")
     public ResponseEntity<FishingTripCommentEntity> addComment(
-            @PathVariable("postId") Long postId,  // URL 경로 변수
-            @RequestBody FishingTripCommentDto commentDto, // ✅ DTO 사용
-            HttpServletRequest request) {
-        return ResponseEntity.ok(commentService.addComment(postId, commentDto.getContent(), request));
+            @PathVariable("commentId") Long fishingTripId,  // @PathVariable은 받아온 URL에 있는 {postId}를 파라미터로 받아올 수 있음
+            @RequestBody FishingTripCommentDto commentDto, // DTO 사용
+            HttpServletRequest request) { // HttpServletRequest로 헤더, 쿠키, 토큰 등을 받아옴
+        return ResponseEntity.ok(commentService.addComment(fishingTripId, commentDto.getContent(), request));
     }
 
-    // ✅ 댓글 조회 API
-    @GetMapping("/{postId}/comments")
-    public ResponseEntity<List<ResponseFishingTripComment>> getComments(@PathVariable Long postId) {
-        return ResponseEntity.ok(commentService.getComments(postId));
+    // 댓글 조회 API
+    @GetMapping("/{commentId}")
+    public ResponseEntity<List<ResponseFishingTripComment>> getComments(@PathVariable("commentId") Long fishingTripId, HttpServletRequest request) {
+        return ResponseEntity.ok(commentService.getComments(fishingTripId, request));
     }
 
+    // ✅ 댓글 좋아요 API
+    @PostMapping("/{commentId}/like")
+    public ResponseEntity<Void> likeComment(@PathVariable("commentId") Long commentId, HttpServletRequest request) {
+        commentService.toggleCommentLike(commentId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    // ✅ 댓글 좋아요 개수 조회 API
+    @GetMapping("/{commentId}/likes")
+    public ResponseEntity<Long> getCommentLikes(@PathVariable("commentId") Long commentId) {
+        return ResponseEntity.ok(commentService.getCommentLikeCount(commentId));
+    }
 }

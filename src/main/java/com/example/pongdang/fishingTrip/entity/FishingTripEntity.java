@@ -45,6 +45,9 @@ public class FishingTripEntity {
 
     private int viewCount = 0; // 조회수 증가 (기본값 0)
 
+    @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<FishingTripCommentEntity> comments = new ArrayList<>();
+
     //조회수 증가 메서드
     public void increaseViewCount(){
         this.viewCount += 1;
