@@ -4,9 +4,6 @@ spring:
   profiles:
     active: local  # 기본 실행 프로필 (로컬 개발)
 
-server:
-  port: 8090
-
 jwt:
   secret: "b0j48K7h6YvB5pN8tQ2m3X4rW1zT9fG7"
 

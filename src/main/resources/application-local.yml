@@ -5,6 +5,7 @@ spring:
 
 server:
   url: "http://localhost:8090"
+  port: 8090
   address: 0.0.0.0  # 외부 접근 가능하도록 설정
 
 file:
