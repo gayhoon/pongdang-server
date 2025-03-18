@@ -1,0 +1,26 @@
+spring:
+  config:
+    activate:
+      on-profile: local  # 'local' 프로필에서만 적용
+
+server:
+  url: "http://localhost:8090"
+  address: 0.0.0.0  # 외부 접근 가능하도록 설정
+
+file:
+  upload-dir: "C:/pongdang-server/uploads"  # Windows 로컬 개발 환경 경로
+
+datasource:
+  url: jdbc:h2:file:./data/testdb
+  driverClassName: org.h2.Driver
+  username: sa
+  password:
+
+h2:
+  console:
+    enabled: true
+
+jpa:
+  hibernate:
+    ddl-auto: update
+  show-sql: true
