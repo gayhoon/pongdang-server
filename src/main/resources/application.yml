@@ -22,6 +22,8 @@ jwt:
 spring:
   application:
     name: pongdang
+  profiles:
+    active: local
   datasource:
     url: jdbc:h2:file:./data/testdb
     drvierClassName: org.h2.Driver

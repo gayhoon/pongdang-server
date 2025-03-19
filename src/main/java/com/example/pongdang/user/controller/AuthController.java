@@ -7,6 +7,7 @@ import com.example.pongdang.user.provider.JwtTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +22,10 @@ public class AuthController {
     private final UserService userService;
     private final JwtTokenProvider jwtProvider;
     private final RestTemplate restTemplate = new RestTemplate();
+
+    // ✅ 환경 변수에서 Kakao Redirect URI 가져오기
+    @Value("${kakao.redirect-uri}")
+    private String kakaoRedirectUri;
 
     @PostMapping("/kakao")
     public ResponseEntity<?> kakaoLogin(@RequestBody Map<String, String> request, HttpServletResponse response) {
@@ -90,7 +95,7 @@ public class AuthController {
 
         String body = "grant_type=authorization_code"
                 + "&client_id=9cad215e09b7aa7a5b7143e4e4b48a0a"
-                + "&redirect_uri=http://localhost:3000/auth/callback"
+                + "&redirect_uri=" + kakaoRedirectUri // 환경변수 적용
                 + "&code=" + code;
 
         HttpEntity<String> request = new HttpEntity<>(body, headers);

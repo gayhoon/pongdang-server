@@ -1,0 +1,2 @@
+kakao:
+  redirect-uri: "http://localhost:3000/auth/callback"
