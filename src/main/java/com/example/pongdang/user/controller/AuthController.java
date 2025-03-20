@@ -52,7 +52,7 @@ public class AuthController {
             cookie.setSecure(false); // HTTPS 환경에서는 true
             cookie.setPath("/");
             cookie.setMaxAge(60 * 60); // 1시간
-            cookie.setDomain("localhost"); // 도메인 설정 (클라이언트 & 서버 공유)
+            cookie.setDomain("43.201.88.18"); // 도메인 설정 (클라이언트 & 서버 공유)
             cookie.setAttribute("SameSite", "None"); // 추가!
             response.addHeader("Set-Cookie", "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None"); // SameSite=None 설정 추가
 

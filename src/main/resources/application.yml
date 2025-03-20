@@ -1,7 +1,7 @@
 
 server:
   port: 8090
-  url: "http://localhost:8090"
+  url: "http://43.201.88.18:8090"
 
 logging:
   level:
