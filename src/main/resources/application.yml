@@ -1,7 +1,7 @@
 
 server:
   port: 8090
-  url: "http://43.201.88.18:8090"
+  url: "https://pongdangserver.shop"
 
 logging:
   level:
@@ -48,5 +48,5 @@ spring:
       max-request-size: 100MB # 전체 요청 크기 (파일 여러 개 포함)
 
 kakao:
+  redirect-uri: "https://pongdang-app-tau.vercel.app/auth/callback"
 #  redirect-uri: "http://localhost:3000/auth/callback"
-  redirect-uri: "http://43.201.88.18:8090/auth/callback"
