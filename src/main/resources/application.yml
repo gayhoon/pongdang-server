@@ -1,7 +1,7 @@
 
 server:
-#  port: 8090 로컬인 경우[체인지]
-  port: 443 #운영인 경우[체인지]
+  port: 8090 로컬인 경우[체인지]
+#  port: 443 #운영인 경우[체인지]
 #  url: "http://localhost:8090" # 로컬인 경우 [체인지]
   url: "https://pongdangserver.shop" # 운영인 경우 [체인지]
 
