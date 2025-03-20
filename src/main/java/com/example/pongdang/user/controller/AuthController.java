@@ -49,10 +49,10 @@ public class AuthController {
             // HTTP-only 쿠키로 JWT 저장 (보안 강화)
             Cookie cookie = new Cookie("jwt", jwtToken);
             cookie.setHttpOnly(true);
-            cookie.setSecure(false); // HTTPS 환경에서는 true
+            cookie.setSecure(true); // HTTPS 환경에서는 true [체인지]
             cookie.setPath("/");
             cookie.setMaxAge(60 * 60); // 1시간
-            cookie.setDomain("pongdangserver.shop"); // 도메인 설정 (클라이언트 & 서버 공유)
+            cookie.setDomain("pongdangserver.shop"); // 도메인 설정 (클라이언트 & 서버 공유) [체인지]
             cookie.setAttribute("SameSite", "None"); // 추가!
             response.addHeader("Set-Cookie", "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None"); // SameSite=None 설정 추가
 
@@ -77,10 +77,10 @@ public class AuthController {
         // 쿠키 삭제 (쿠키 유효시간 0으로 설정)
         Cookie cookie = new Cookie("jwt", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false); // HTTPS 환경이면 true
+        cookie.setSecure(true); // HTTPS 환경이면 true [체인지]
         cookie.setPath("/");
         cookie.setMaxAge(0);
-        cookie.setDomain("localhost"); // 로컬 환경에서는 명시적으로 추가
+        cookie.setDomain("pongdangserver.shop"); // 로컬 환경에서는 명시적으로 추가 [체인지]
         cookie.setAttribute("SameSite", "None"); // 추가!
         response.addCookie(cookie);
 
