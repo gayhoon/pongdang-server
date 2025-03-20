@@ -33,37 +33,40 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // ✅ 쿠키에서 JWT 가져오기
+        String jwtToken = null;
+
+        // ✅ 1. 쿠키에서 JWT 가져오기
         Optional<Cookie> jwtCookie = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
                 .filter(cookie -> "jwt".equals(cookie.getName()))
                 .findFirst();
 
         if (jwtCookie.isPresent()) {
-            String jwtToken = jwtCookie.get().getValue();
+            jwtToken = jwtCookie.get().getValue();
+        }
 
-            // ✅ JWT 검증
-            if (jwtProvider.validateToken(jwtToken)) {
-                String email = jwtProvider.getEmailFromToken(jwtToken);
+        // ✅ 2. Safari 대응: Authorization 헤더에서도 JWT 확인 (쿠키가 없을 경우)
+        if (jwtToken == null) {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                jwtToken = authHeader.substring(7);
+            }
+        }
 
-                // ✅ `UserRepository`를 직접 사용하여 사용자 조회
-                Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
-                if (optionalUser.isEmpty()) {
-                    filterChain.doFilter(request, response);
-                    return;
-                }
+        // ✅ 3. JWT 검증 및 사용자 정보 설정
+        if (jwtToken != null && jwtProvider.validateToken(jwtToken)) {
+            String email = jwtProvider.getEmailFromToken(jwtToken);
 
+            Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+            if (optionalUser.isPresent()) {
                 UserEntity userEntity = optionalUser.get();
 
-                // ✅ `getAuthorities()` 대신 빈 리스트 전달
                 UserDetails userDetails = new User(userEntity.getEmail(), "", Collections.emptyList());
 
-                // ✅ Spring Security 인증 객체 생성
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // ✅ 인증 정보 SecurityContext에 저장
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

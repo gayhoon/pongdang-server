@@ -54,7 +54,9 @@ public class AuthController {
             cookie.setMaxAge(60 * 60); // 1시간
             cookie.setDomain("pongdangserver.shop"); // 도메인 설정 (클라이언트 & 서버 공유) [체인지]
             cookie.setAttribute("SameSite", "None"); // 추가!
-            response.addHeader("Set-Cookie", "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None"); // SameSite=None 설정 추가
+            // Safari 지원을 위해 Set-Cookie 헤더 추가 (쿠키 직접 설정 대신)
+            String cookieHeader = "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None";
+            response.setHeader("Set-Cookie", cookieHeader);
 
             // JSON 형식으로 응답 반환
             Map<String, String> responseBody = Map.of(
@@ -82,7 +84,9 @@ public class AuthController {
         cookie.setMaxAge(0);
         cookie.setDomain("pongdangserver.shop"); // 로컬 환경에서는 명시적으로 추가 [체인지]
         cookie.setAttribute("SameSite", "None"); // 추가!
-        response.addCookie(cookie);
+        // Safari 대응을 위해 Set-Cookie 직접 추가
+        String cookieHeader = "jwt=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0";
+        response.setHeader("Set-Cookie", cookieHeader);
 
         return ResponseEntity.ok("Logged out successfully");
     }
