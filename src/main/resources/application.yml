@@ -46,3 +46,7 @@ spring:
       enabled: true
       max-file-size: 50MB   # 업로드 가능한 파일 크기 (개별 파일)
       max-request-size: 100MB # 전체 요청 크기 (파일 여러 개 포함)
+
+kakao:
+#  redirect-uri: "http://localhost:3000/auth/callback"
+  redirect-uri: "http://43.201.88.18:8090/auth/callback"
