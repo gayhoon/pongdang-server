@@ -19,7 +19,7 @@ file:
 jwt:
   secret: "b0j48K7h6YvB5pN8tQ2m3X4rW1zT9fG7"
 
-# H2 Database(시도) 흠 ㄹ
+# H2 Database(시도) 흠 ㄹ3
 spring:
   application:
     name: pongdang
