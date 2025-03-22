@@ -1,8 +1,8 @@
 
 server:
   port: 8090
-#  url: "http://localhost:8090" # 로컬인 경우 [체인지]
-  url: "https://pongdangserver.shop" # 운영인 경우 [체인지]
+  url: "http://localhost:8090" # 로컬인 경우 [체인지]
+#  url: "https://pongdangserver.shop" # 운영인 경우 [체인지]
 
 logging:
   level:
@@ -51,5 +51,5 @@ spring:
       max-request-size: 100MB # 전체 요청 크기 (파일 여러 개 포함)
 
 kakao:
-  redirect-uri: "https://www.pongdangserver.shop/auth/callback"
-#  redirect-uri: "http://localhost:3000/auth/callback"
+#  redirect-uri: "https://www.pongdangserver.shop/auth/callback"
+  redirect-uri: "http://localhost:3000/auth/callback"
