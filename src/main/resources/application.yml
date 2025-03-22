@@ -1,6 +1,6 @@
 
 server:
-  port: 800
+  port: 80090
 #  url: "http://localhost:8090" # 로컬인 경우 [체인지]
   url: "https://pongdangserver.shop" # 운영인 경우 [체인지]
 
