@@ -10,7 +10,6 @@ logging:
     org.springframework: DEBUG
     root: INFO
     org.hibernate.SQL: DEBUG
-    # springboot 3.x hibernate 6버전 이상 바인딩된 파라미터 로그 설정
     org.hibernate.orm.jdbc.bind: TRACE
 
 file:
@@ -33,6 +32,9 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
   jpa:
     hibernate:
       ddl-auto: update
