@@ -1,6 +1,7 @@
 package com.example.pongdang.fishingTrip.entity;
 
 import com.example.pongdang.user.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,6 +40,7 @@ public class FishingTripEntity {
     private Set<FishingTripFishEntity> fishes = new HashSet<>();
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<FishingTripImageEntity> images = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY) // 작성자(userEntity와 연결)
