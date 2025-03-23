@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/user/**").authenticated() // 인증 필요
                         .requestMatchers(HttpMethod.GET, "/api/v1/fishingTrip/**").permitAll() // ✅ 전체조회, 상세조회는 허용
                         .requestMatchers(HttpMethod.POST, "/api/v1/fishingTrip/**").authenticated() // ✅ 글쓰기, 수정은 인증 필요
+                        .requestMatchers("/api/v1/fishingTrip/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtCookieAuthFilter, UsernamePasswordAuthenticationFilter.class) // 필터 추가

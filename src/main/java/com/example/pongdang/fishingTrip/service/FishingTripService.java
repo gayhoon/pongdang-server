@@ -232,7 +232,7 @@ public class FishingTripService {
     }
 
     // 특정 게시글 조회 기능
-    public ResponseFishingTrip getFishingTripById(Long id, String jwtToken) {
+    public ResponseFishingTrip getFishingTripById(Long id, String email) {
         FishingTripEntity post = fishingTripRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
@@ -240,9 +240,9 @@ public class FishingTripService {
         post.increaseViewCount();
         fishingTripRepository.save(post); // 변경 사항 저장
 
-        // ✅ JWT 토큰이 없을 때 null 허용
-        String email = (jwtToken != null) ? jwtProvider.getEmailFromToken(jwtToken) : null;
-        UserEntity user = (email != null) ? userRepository.findByEmail(email).orElse(null) : null;
+        UserEntity user = (email != null)
+                ? userRepository.findByEmail(email).orElse(null)
+                : null;
 
         // ✅ 댓글 목록 + 좋아요 개수 포함
         List<ResponseFishingTripComment> comments = post.getComments().stream()
