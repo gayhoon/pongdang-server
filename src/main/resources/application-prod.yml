@@ -22,7 +22,7 @@ jwt:
   secret: "b0j48K7h6YvB5pN8tQ2m3X4rW1zT9fG7"
 
 file:
-  upload-dir: /var/lib/jenkins/workspace/pongdangserver/uploads
+  upload-dir: /home/ubuntu/uploads
 
 kakao:
   redirect-uri: "https://www.pongdangserver.shop/auth/callback"
