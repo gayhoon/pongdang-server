@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()  // 로그인, 회원가입 허용
                         .requestMatchers("/api/v1/user/**").authenticated() // 인증 필요
+                        .requestMatchers("/api/v1/fishingTrip/**").authenticated() // ✅ 이 줄 추가!!
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtCookieAuthFilter, UsernamePasswordAuthenticationFilter.class) // 필터 추가
