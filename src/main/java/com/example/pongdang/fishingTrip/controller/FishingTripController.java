@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.example.pongdang.user.provider.JwtTokenProvider;
@@ -74,6 +75,8 @@ public class FishingTripController {
             @PathVariable("id") Long id,
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader // ✅ JWT 토큰 추가
     ) {
+        System.out.println("👤 인증 정보: " + SecurityContextHolder.getContext().getAuthentication());
+
         // ✅ Authorization 헤더에서 Bearer 토큰 추출 (토큰이 없을 경우 대비)
         String jwtToken = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
                 ? authorizationHeader.substring(7).trim()
