@@ -198,14 +198,15 @@ public class FishingTripService {
 
     // 모든 게시글 조회
     public List<ResponseFishingTrip> getAllBoards() {
-        List<FishingTripEntity> posts = fishingTripRepository.findAllByOrderByIdDesc();
+        // ✅ Lazy 에러 방지를 위한 fetch join 메서드 사용
+        List<FishingTripEntity> posts = fishingTripRepository.findAllWithAllRelations();
 
         return posts.stream().map(post -> ResponseFishingTrip.builder()
                 .id(post.getId())
                 .cate(post.getCate())
                 .title(post.getTitle())
                 .detail(post.getDetail())
-                .authorNickname(post.getAuthor().getNickname()) // 작성자 닉네임 추가
+                .authorNickname(post.getAuthor().getNickname()) // ✅ Lazy 안전하게 접근 가능
                 .date(post.getDate().toString())
                 .viewCount(post.getViewCount()) // 조회수
                 .images(post.getImages().stream()
@@ -223,6 +224,7 @@ public class FishingTripService {
                 .comments(post.getComments().stream()
                         .map(comment -> ResponseFishingTripComment.builder()
                                 .id(comment.getId())
+                                .authorNickname(comment.getUser().getNickname()) // ✅ Lazy-safe
                                 .build())
                         .collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
