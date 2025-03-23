@@ -40,7 +40,6 @@ public class FishingTripEntity {
     private Set<FishingTripFishEntity> fishes = new HashSet<>();
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonIgnore
     private Set<FishingTripImageEntity> images = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY) // 작성자(userEntity와 연결)
