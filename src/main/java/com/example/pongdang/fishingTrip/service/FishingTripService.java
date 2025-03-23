@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,8 +78,8 @@ public class FishingTripService {
                     .location(fishingTripDto.getLocation())
                     .detail(fishingTripDto.getDetail())
                     .author(nickname) // 작성자 추가
-                    .fishes(new ArrayList<>()) // 빈 리스트 추가 (null 방지)
-                    .images(new ArrayList<>()) // 빈 리스트 추가 (null 방지)
+                    .fishes(new HashSet<>()) // 빈 리스트 추가 (null 방지)
+                    .images(new HashSet<>()) // 빈 리스트 추가 (null 방지)
                     .build();
             fishingTripRepository.save(post);
             fishingTripRepository.flush(); // JPA가 즉시 INSERT 실행하여 ID가 생성되도록 강제(신규글 작성 시 client가 바로 생성된 게시글의 id를 받을 수 있도록)
@@ -98,12 +99,12 @@ public class FishingTripService {
 
             // fishes가 null이면 빈 리스트로 초기화
             if(post.getFishes() == null){
-                post.setFishes(new ArrayList<>());
+                post.setFishes(new HashSet<>());
             }
 
             // images가 null이면 빈 리스트로 초기화
             if(post.getImages() == null){
-                post.setImages(new ArrayList<>());
+                post.setImages(new HashSet<>());
             }
 
             fishingTripRepository.save(post);
