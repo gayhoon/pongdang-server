@@ -7,32 +7,18 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // 모든 경로에 대해 CORS 허용
-                        .allowedOriginPatterns("*") // 프론트엔드 URL 허용 로컬일때 [체인지]
-                        .allowedOrigins("https://www.pongdangserver.shop") // 운영일때  [체인지]
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
-                        .allowCredentials(true) // 쿠키 전송 허용
-                        .allowedHeaders("*")
-                        .exposedHeaders("Set-Cookie"); // JWT 헤더 노출
-            }
-            @Override
-            public void addResourceHandlers(ResourceHandlerRegistry registry){
-                // 클라이언트가 'http://localhost:8090/uploads/파일명'으로 이미지 접근 가능하도록 설정
-                registry.addResourceHandler("/uploads/**")
-                        .addResourceLocations("file:uploads/") // 로컬 파일 시스템에서 가져옴
-                        .setCachePeriod(3600); // 캐시 유지 시간 (1시간)
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/")
+                .setCachePeriod(3600);
 
-                registry.addResourceHandler("/uploads/profile/**")
-                        .addResourceLocations("file:uploads/profile/")
-                        .setCachePeriod(3600); // 캐시 유지 시간 (1시간)
-            }
-        };
+        registry.addResourceHandler("/uploads/profile/**")
+                .addResourceLocations("file:uploads/profile/")
+                .setCachePeriod(3600);
     }
+
+    // 🔥 CORS 설정은 제거 (CorsConfig에서 담당)
 }
