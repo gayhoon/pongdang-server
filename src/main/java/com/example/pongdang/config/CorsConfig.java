@@ -24,6 +24,7 @@ public class CorsConfig {
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // ✅ jwt 쿠키 전달 필수 설정
         config.setMaxAge(3600L); // 1시간 동안 preflight 결과 캐시
+        config.setExposedHeaders(List.of("Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
