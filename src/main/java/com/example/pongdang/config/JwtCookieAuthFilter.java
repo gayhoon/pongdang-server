@@ -60,6 +60,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
             String email = jwtProvider.getEmailFromToken(jwtToken);
 
             Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+            System.out.println("✅ 사용자 조회 결과: " + optionalUser);
             if (optionalUser.isPresent()) {
                 UserEntity userEntity = optionalUser.get();
 
