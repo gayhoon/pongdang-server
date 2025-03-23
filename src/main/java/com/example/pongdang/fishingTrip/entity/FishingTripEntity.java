@@ -35,7 +35,7 @@ public class FishingTripEntity {
         this.date = LocalDate.now(); // 자동으로 오늘 날짜 설정
     }
 
-    @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<FishingTripFishEntity> fishes = new HashSet<>();
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
