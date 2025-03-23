@@ -40,16 +40,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager() {
-//        return new ProviderManager(List.of(authenticationProvider()));
-//    }
-//
-//    @Bean
-//    public AuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        provider.setUserDetailsService(userService);
-//        return provider;
-//    }
 }

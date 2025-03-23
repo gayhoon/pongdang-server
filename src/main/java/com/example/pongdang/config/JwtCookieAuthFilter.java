@@ -33,6 +33,8 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("🔥 JwtCookieAuthFilter 실행됨!");
+
         String jwtToken = null;
 
         // ✅ 1. 쿠키에서 JWT 가져오기
@@ -54,6 +56,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
         // ✅ 3. JWT 검증 및 사용자 정보 설정
         if (jwtToken != null && jwtProvider.validateToken(jwtToken)) {
+            System.out.println("✅ 추출된 JWT: " + jwtToken);
             String email = jwtProvider.getEmailFromToken(jwtToken);
 
             Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
