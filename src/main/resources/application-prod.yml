@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://config-db.cvcw2cca2r2e.ap-northeast-2.rds.amazonaws.com:3306/pongdang?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://config-db.cvcw2cca2r2e.ap-northeast-2.rds.amazonaws.com:3306/pongdangDB?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: gayhoon
     password: a9a1a7a4
