@@ -42,7 +42,11 @@ public class UserService {
     public ResponseUser getUserInfo(HttpServletRequest request) {
         Optional<UserEntity> optionalUser = getUserFromJwt(request);
         if (optionalUser.isEmpty()) {
-            throw new RuntimeException("Unauthorized: JWT가 유효하지 않거나 사용자 정보를 찾을 수 없습니다.");
+            return ResponseUser.builder()
+                    .email(null)
+                    .nickname(null)
+                    .profileImage(null)
+                    .build();
         }
         UserEntity userEntity = optionalUser.get();
         return ResponseUser.builder()
