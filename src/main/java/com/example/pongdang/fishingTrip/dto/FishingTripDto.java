@@ -5,6 +5,7 @@ import com.example.pongdang.fishingTrip.entity.FishingTripFishEntity;
 import com.example.pongdang.user.entity.UserEntity;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +41,8 @@ public class FishingTripDto {
             List<FishingTripFishEntity> fishEntities = this.fishes.stream()
                     .map(FishingTripFishDto::toEntity)
                     .peek(fish -> fish.setFishingTrip(fishingTripEntity)) // 조행기와 연관 설정
-                    .collect(Collectors.toList());
-            fishingTripEntity.setFishes(fishEntities);
+                    .toList();
+            fishingTripEntity.setFishes(new HashSet<>(fishEntities));
         }
 
         return fishingTripEntity;
