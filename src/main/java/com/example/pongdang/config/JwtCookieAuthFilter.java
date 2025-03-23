@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Component // Spring이 관리하는 Bean으로 등록
@@ -69,8 +67,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
                 UserDetails userDetails = new User(
                         userEntity.getEmail(),
                         "",
-//                        Collections.emptyList() // 임시로 주석처리
-                        List.of(new SimpleGrantedAuthority("ROLE_USER")) // ✅ 권한 부여 임시로 주석처리하면서 넣음
+                        Collections.emptyList()
                 );
 
                 UsernamePasswordAuthenticationToken authToken =
