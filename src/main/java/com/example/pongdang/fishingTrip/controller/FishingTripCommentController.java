@@ -20,7 +20,7 @@ public class FishingTripCommentController {
 
     // 댓글 작성 API
     @PostMapping("/{commentId}")
-    public ResponseEntity<FishingTripCommentEntity> addComment(
+    public ResponseEntity<ResponseFishingTripComment> addComment(
             @PathVariable("commentId") Long fishingTripId,  // @PathVariable은 받아온 URL에 있는 {postId}를 파라미터로 받아올 수 있음
             @RequestBody FishingTripCommentDto commentDto, // DTO 사용
             HttpServletRequest request) { // HttpServletRequest로 헤더, 쿠키, 토큰 등을 받아옴

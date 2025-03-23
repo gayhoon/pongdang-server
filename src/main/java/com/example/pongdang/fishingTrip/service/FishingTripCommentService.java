@@ -33,7 +33,7 @@ public class FishingTripCommentService {
 
     // ✅ 댓글 작성
     @Transactional
-    public FishingTripCommentEntity addComment(Long fishingTripId, String content, HttpServletRequest request) {
+    public ResponseFishingTripComment addComment(Long fishingTripId, String content, HttpServletRequest request) {
         String email = jwtProvider.getEmailFromRequest(request);
         if (email == null) throw new RuntimeException("Unauthorized");
 
@@ -50,7 +50,10 @@ public class FishingTripCommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        return commentRepository.save(comment);
+        FishingTripCommentEntity saved = commentRepository.save(comment);
+
+        boolean isLiked = false; // 작성 직후니까 false
+        return ResponseFishingTripComment.of(saved, isLiked);
     }
 
     // ✅ 특정 게시글의 댓글 목록 조회 (좋아요 포함)

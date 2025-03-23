@@ -15,6 +15,19 @@ public class ResponseFishingTripComment {
     private String authorProfileImage;
     private String content;
     private LocalDateTime createdAt;
-    private int likeCount;  // ✅ 좋아요 개수 추가
-    private boolean isLiked; // ✅ 사용자가 좋아요 눌렀는지 여부 추가
+    private int likeCount;
+    private boolean isLiked;
+
+    // ✅ 여기에 넣어야 함!
+    public static ResponseFishingTripComment of(FishingTripCommentEntity comment, boolean isLiked) {
+        return ResponseFishingTripComment.builder()
+                .id(comment.getId())
+                .authorNickname(comment.getUser().getNickname())
+                .authorProfileImage(comment.getUser().getProfileImageUrl())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .likeCount(comment.getLikes() != null ? comment.getLikes().size() : 0)
+                .isLiked(isLiked)
+                .build();
+    }
 }

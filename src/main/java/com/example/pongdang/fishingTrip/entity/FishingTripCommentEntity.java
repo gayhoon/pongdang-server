@@ -22,7 +22,6 @@ public class FishingTripCommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY) // 댓글과 게시글 관계 (N:1)
     @JoinColumn(name = "fishing_trip_id", nullable = false)
-    @JsonIgnore  // FishingTripCommentEntity 응답 시 굳이 fishingtrip정보 제외
     private FishingTripEntity fishingTrip;
 
     @ManyToOne(fetch = FetchType.LAZY) // 댓글과 사용자 관계 (N:1)
