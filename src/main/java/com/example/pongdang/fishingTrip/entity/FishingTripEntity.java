@@ -6,7 +6,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -34,10 +36,10 @@ public class FishingTripEntity {
     }
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FishingTripFishEntity> fishes = new ArrayList<>();
+    private Set<FishingTripFishEntity> fishes = new HashSet<>();
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FishingTripImageEntity> images = new ArrayList<>();
+    private Set<FishingTripImageEntity> images = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY) // 작성자(userEntity와 연결)
     @JoinColumn(name = "author_id", nullable = false)
@@ -46,7 +48,7 @@ public class FishingTripEntity {
     private int viewCount = 0; // 조회수 증가 (기본값 0)
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FishingTripCommentEntity> comments = new ArrayList<>();
+    private Set<FishingTripCommentEntity> comments = new HashSet<>();
 
     //조회수 증가 메서드
     public void increaseViewCount(){
