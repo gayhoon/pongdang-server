@@ -71,7 +71,10 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
+                System.out.println("✅ 사용자 인증 토큰 생성 완료: " + authToken);
+                System.out.println("✅ 인증 정보 설정 전: " + SecurityContextHolder.getContext().getAuthentication());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("✅ 인증 정보 설정 후: " + SecurityContextHolder.getContext().getAuthentication());
             }
         }
 
