@@ -45,7 +45,7 @@ public class FishingTripEntity {
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
-    private int viewCount = 0; // 조회수 증가 (기본값 0)
+    private int viewCount = 0; // 조회수 증가 (기본값 0 )
 
     @OneToMany(mappedBy = "fishingTrip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<FishingTripCommentEntity> comments = new HashSet<>();
