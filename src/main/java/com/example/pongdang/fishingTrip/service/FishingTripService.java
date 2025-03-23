@@ -85,7 +85,7 @@ public class FishingTripService {
             fishingTripRepository.flush(); // JPA가 즉시 INSERT 실행하여 ID가 생성되도록 강제(신규글 작성 시 client가 바로 생성된 게시글의 id를 받을 수 있도록)
         } else {
             post = fishingTripRepository.findById(fishingTripDto.getId())
-                    .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다.."));
 
             // 작성자가 일치하는지 확인 (수정 권한 체크)
             if(!post.getAuthor().getEmail().equals(email)){
