@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -34,9 +36,14 @@ public class UserController {
     // ✅ 회원정보 조회 (서비스로 위임)
     @GetMapping("/me")
     public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
-        ResponseUser responseUser = userService.getUserInfo(request);
-        return ResponseEntity.ok(responseUser);
+        Optional<ResponseUser> optionalUser = userService.getUserInfo(request);
+        if (optionalUser.isEmpty()) {
+            // 로그인 안 된 사용자, 빈 응답 or null 응답
+            return ResponseEntity.ok().body(null); // 혹은 body에 안내 메시지 넣어도 됨
+        }
+        return ResponseEntity.ok(optionalUser.get());
     }
+
 
     // ✅ 회원탈퇴 (서비스로 위임)
     @DeleteMapping("/me")

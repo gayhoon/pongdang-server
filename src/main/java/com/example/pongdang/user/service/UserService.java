@@ -39,21 +39,14 @@ public class UserService {
     }
 
     // ✅ [2] JWT 검증 후 사용자 정보 조회
-    public ResponseUser getUserInfo(HttpServletRequest request) {
-        Optional<UserEntity> optionalUser = getUserFromJwt(request);
-        if (optionalUser.isEmpty()) {
-            return ResponseUser.builder()
-                    .email(null)
-                    .nickname(null)
-                    .profileImage(null)
-                    .build();
-        }
-        UserEntity userEntity = optionalUser.get();
-        return ResponseUser.builder()
-                .email(userEntity.getEmail())
-                .nickname(userEntity.getNickname())
-                .profileImage(userEntity.getProfileImageUrl())
-                .build();
+    public Optional<ResponseUser> getUserInfo(HttpServletRequest request) {
+        return getUserFromJwt(request)
+                .map(user -> ResponseUser.builder()
+                        .email(user.getEmail())
+                        .nickname(user.getNickname())
+                        .profileImage(user.getProfileImageUrl())
+                        .build()
+                );
     }
 
     // ✅ [3] JWT 검증 후 사용자 엔티티 조회

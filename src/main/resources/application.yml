@@ -13,7 +13,7 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
 
 file:
-  upload-dir: C:/pongdang-server/uploads # 이미지 파일 업로드 경로(로컬)
+  upload-dir: uploads
 
 jwt:
   secret: "b0j48K7h6YvB5pN8tQ2m3X4rW1zT9fG7"

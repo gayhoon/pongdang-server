@@ -1,5 +1,6 @@
 package com.example.pongdang.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -22,15 +23,18 @@ public class WebConfig {
                         .allowedHeaders("*")
                         .exposedHeaders("Set-Cookie"); // JWT 헤더 노출
             }
+
+            @Value("${file.upload-dir}")
+            private String uploadDir;
+
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry){
-                // 클라이언트가 'http://localhost:8090/uploads/파일명'으로 이미지 접근 가능하도록 설정
                 registry.addResourceHandler("/uploads/**")
-                        .addResourceLocations("file:uploads/") // 로컬 파일 시스템에서 가져옴
+                        .addResourceLocations("file:" + uploadDir + "/") // yml에서 동적으로 불러오기
                         .setCachePeriod(3600); // 캐시 유지 시간 (1시간)
 
                 registry.addResourceHandler("/uploads/profile/**")
-                        .addResourceLocations("file:uploads/profile/")
+                        .addResourceLocations("file:" + uploadDir + "/profile/") // yml에서 동적으로 불러오기
                         .setCachePeriod(3600); // 캐시 유지 시간 (1시간)
             }
         };

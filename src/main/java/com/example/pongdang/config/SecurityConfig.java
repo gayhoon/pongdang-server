@@ -32,10 +32,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()  // 로그인, 회원가입 허용
+                        .requestMatchers("/api/v1/user/me").permitAll() // 사용자 조회는 허용
                         .requestMatchers("/api/v1/user/**").authenticated() // 인증 필요
                         .requestMatchers(HttpMethod.GET, "/api/v1/fishingTrip/**").permitAll() // ✅ 전체조회, 상세조회는 허용
                         .requestMatchers(HttpMethod.POST, "/api/v1/fishingTrip/**").authenticated() // ✅ 글쓰기, 수정은 인증 필요
-                        .requestMatchers("/api/v1/fishingTrip/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtCookieAuthFilter, UsernamePasswordAuthenticationFilter.class) // 필터 추가
