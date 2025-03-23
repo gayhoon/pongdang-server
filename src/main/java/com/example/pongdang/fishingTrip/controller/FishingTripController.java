@@ -88,12 +88,9 @@ public class FishingTripController {
             email = principal.getUsername(); // ✅ 이메일
         }
 
-        try {
-            ResponseFishingTrip post = fishingTripService.getFishingTripById(id, email);
-            return ResponseEntity.ok(post);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // ✅ JWT 문제 시 401 응답
-        }
+        // ❗️ 여기서 try-catch로 잡을 필요 없음. 데이터 못 찾을 때만 404로 하면 됨
+        ResponseFishingTrip post = fishingTripService.getFishingTripById(id, email);
+        return ResponseEntity.ok(post);
     }
 
     // 특정 게시글 삭제 API
