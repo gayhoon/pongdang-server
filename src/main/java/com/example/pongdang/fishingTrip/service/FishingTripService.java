@@ -13,7 +13,7 @@ import com.example.pongdang.fishingTrip.vo.ResponseFishingTripComment;
 import com.example.pongdang.user.entity.UserEntity;
 import com.example.pongdang.user.provider.JwtTokenProvider;
 import com.example.pongdang.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
@@ -232,6 +232,7 @@ public class FishingTripService {
     }
 
     // 특정 게시글 조회 기능
+    @Transactional(readOnly = true)
     public ResponseFishingTrip getFishingTripById(Long id, String email) {
         FishingTripEntity post = fishingTripRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));

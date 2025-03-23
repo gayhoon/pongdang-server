@@ -80,8 +80,6 @@ public class FishingTripController {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("👤 인증 정보: " + auth);
 
-        System.out.println("👤 싯팔: " + auth);
-
         String email = null;
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
             var principal = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
