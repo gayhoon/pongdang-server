@@ -16,7 +16,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // 모든 경로에 대해 CORS 허용
 //                        .allowedOriginPatterns("*") // 프론트엔드 URL 허용 로컬일때 [체인지]
-                        .allowedOrigins("https://www.pongdangserver.shop") // 운영일때 [체인지]
+                        .allowedOrigins("https://www.pongdangserver.shop") // 운영일때  [체인지]
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
                         .allowCredentials(true) // 쿠키 전송 허용
                         .allowedHeaders("*")
