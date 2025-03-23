@@ -19,7 +19,8 @@ public class FileStorageService {
     @Value("${server.url}") // application.properties에서 서버 URL 가져오기
     private String serverUrl;
 
-    private final String uploadDir = "uploads/"; // 업로드 디렉토리
+    @Value("${file.upload-dir}") // 업로드 절대 경로
+    private String uploadDir;
 
     @Transactional
     public String saveFile(MultipartFile file) {
