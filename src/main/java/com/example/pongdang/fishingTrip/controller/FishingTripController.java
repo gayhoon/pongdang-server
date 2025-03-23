@@ -72,35 +72,21 @@ public class FishingTripController {
     // 특정 게시글 조회 API
     @GetMapping("/{id}")
     public ResponseEntity<ResponseFishingTrip> getFishingTripById(
-            @PathVariable("id") Long id
-//            @RequestHeader(value = "Authorization", required = false) String authorizationHeader // ✅ JWT 토큰 추가 임시주석
+            @PathVariable("id") Long id,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader // ✅ JWT 토큰 추가
     ) {
         System.out.println("👤 인증 정보: " + SecurityContextHolder.getContext().getAuthentication());
 
         // ✅ Authorization 헤더에서 Bearer 토큰 추출 (토큰이 없을 경우 대비)
-//        String jwtToken = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
-//                ? authorizationHeader.substring(7).trim()
-//                : null; 임시주석
-
-        String email = null;
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-            var principal = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-            email = principal.getUsername(); // email
-        }
-
-//        try {
-//            ResponseFishingTrip post = fishingTripService.getFishingTripById(id, jwtToken);
-//            return ResponseEntity.ok(post);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // ✅ JWT 문제 시 401 응답
-//        } 임시주석
+        String jwtToken = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
+                ? authorizationHeader.substring(7).trim()
+                : null;
 
         try {
-            ResponseFishingTrip post = fishingTripService.getFishingTripById(id, email);
+            ResponseFishingTrip post = fishingTripService.getFishingTripById(id, jwtToken);
             return ResponseEntity.ok(post);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // ✅ JWT 문제 시 401 응답
         }
     }
 
