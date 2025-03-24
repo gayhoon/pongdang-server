@@ -97,7 +97,7 @@ public class FishingTripCommentService {
 
     // ✅ 댓글 좋아요 기능
     @Transactional
-    public void toggleCommentLike(Long commentId, HttpServletRequest request) {
+    public ResponseFishingTripComment toggleCommentLike(Long commentId, HttpServletRequest request) {
         String email = jwtProvider.getEmailFromRequest(request);
         if (email == null) throw new RuntimeException("Unauthorized");
 
@@ -109,17 +109,32 @@ public class FishingTripCommentService {
 
         Optional<FishingTripCommentLikeEntity> existingLike = likeRepository.findByCommentAndUser(comment, user);
 
+        boolean isLiked;
+
         if (existingLike.isPresent()) {
             likeRepository.delete(existingLike.get()); // ✅ 이미 좋아요 눌렀다면 삭제
+            isLiked = false;
         } else {
             likeRepository.save(FishingTripCommentLikeEntity.builder() // ✅ 좋아요 추가
                     .comment(comment)
                     .user(user)
                     .build());
+            isLiked = true;
         }
 
+        int likeCount = likeRepository.countByComment(comment);
+
         // ✅ 즉시 반영
-        likeRepository.flush();
+//        likeRepository.flush();
+        return ResponseFishingTripComment.builder()
+                .id(comment.getId())
+                .authorNickname(comment.getUser().getNickname())
+                .authorProfileImage(comment.getUser().getProfileImageUrl())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .likeCount(likeCount)
+                .isLiked(isLiked)
+                .build();
     }
 
     // ✅ 특정 댓글의 좋아요 개수 반환
