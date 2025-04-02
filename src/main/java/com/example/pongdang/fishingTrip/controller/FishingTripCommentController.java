@@ -35,9 +35,9 @@ public class FishingTripCommentController {
 
     // ✅ 댓글 좋아요 API
     @PostMapping("/{commentId}/like")
-    public ResponseEntity<Void> likeComment(@PathVariable("commentId") Long commentId, HttpServletRequest request) {
-        commentService.toggleCommentLike(commentId, request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseFishingTripComment> likeComment(@PathVariable("commentId") Long commentId, HttpServletRequest request) {
+
+        return ResponseEntity.ok(commentService.toggleCommentLike(commentId, request));
     }
 
     // ✅ 댓글 좋아요 개수 조회 API

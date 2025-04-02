@@ -232,7 +232,7 @@ public class FishingTripService {
     }
 
     // 특정 게시글 조회 기능
-    @Transactional(readOnly = true)
+    @Transactional
     public ResponseFishingTrip getFishingTripById(Long id, String email) {
         FishingTripEntity post = fishingTripRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
