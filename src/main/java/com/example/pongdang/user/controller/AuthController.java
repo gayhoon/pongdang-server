@@ -51,7 +51,7 @@ public class AuthController {
             cookie.setHttpOnly(true);
             cookie.setSecure(true); // HTTPS 환경에서는 true [체인지]
             cookie.setPath("/");
-            cookie.setMaxAge(60 * 60); // 1시간
+            cookie.setMaxAge(60 * 60); // 1시간.
             cookie.setDomain("pongdangserver.shop"); // 도메인 설정 (클라이언트 & 서버 공유) [체인지]
             cookie.setAttribute("SameSite", "None"); // 추가!
             // Safari 지원을 위해 Set-Cookie 헤더 추가 (쿠키 직접 설정 대신)
