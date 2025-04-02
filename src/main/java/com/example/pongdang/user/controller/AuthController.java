@@ -58,6 +58,9 @@ public class AuthController {
             String cookieHeader = "jwt=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None";
             response.setHeader("Set-Cookie", cookieHeader);
 
+            // ✅ 로그로 확인!
+            System.out.println("🔐 Set-Cookie 헤더: " + cookieHeader);
+
             // JSON 형식으로 응답 반환
             Map<String, String> responseBody = Map.of(
                     "message", "Login successful",
